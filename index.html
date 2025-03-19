@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon Sleep 宝可梦评分系统</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f8ff;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .calculator-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #34495e;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .subskill-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .subskill-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px;
+            border-radius: 4px;
+        }
+        .subskill-gold {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+        }
+        .subskill-blue {
+            background-color: #cce5ff;
+            border: 1px solid #b8daff;
+        }
+        .subskill-white {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+        }
+        .subskill-section {
+            margin: 15px 0;
+        }
+        .subskill-section-title {
+            font-weight: bold;
+            margin: 10px 0;
+            color: #2c3e50;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f4f8;
+            border-radius: 5px;
+            display: none;
+        }
+        .rating-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 5px 0;
+        }
+        .rating-fill {
+            height: 100%;
+            background-color: #2ecc71;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Pokemon Sleep 宝可梦评分系统</h1>
+        
+        <div class="calculator-section">
+            <h2>宝可梦基本信息</h2>
+            <label for="pokemonName">宝可梦名称:</label>
+            <select id="pokemonName" onchange="updatePokemonType()">
+                <option value="">请选择宝可梦</option>
+                <optgroup label="草系">
+                    <option value="1">妙蛙种子</option>
+                    <option value="2">妙蛙草</option>
+                    <option value="3">妙蛙花</option>
+                    <option value="69">喇叭芽</option>
+                    <option value="70">口呆花</option>
+                    <option value="71">大食花</option>
+                    <option value="152">菊草叶</option>
+                    <option value="153">月桂叶</option>
+                    <option value="154">大竺葵</option>
+                    <option value="906">新叶喵</option>
+                    <option value="907">蒂蕾喵</option>
+                    <option value="470">叶伊布</option>
+                </optgroup>
+                <optgroup label="火系">
+                    <option value="4">小火龙</option>
+                    <option value="5">火恐龙</option>
+                    <option value="6">喷火龙</option>
+                    <option value="37">六尾</option>
+                    <option value="38">九尾</option>
+                    <option value="58">卡蒂狗</option>
+                    <option value="59">风速狗</option>
+                    <option value="136">火伊布</option>
+                    <option value="155">火球鼠</option>
+                    <option value="156">火岩鼠</option>
+                    <option value="157">火暴兽</option>
+                    <option value="244">炎帝</option>
+                    <option value="909">呆火鳄</option>
+                    <option value="910">炙烫鳄</option>
+                </optgroup>
+                <optgroup label="水系">
+                    <option value="7">杰尼龟</option>
+                    <option value="8">卡咪龟</option>                    <option value="9">水箭龟</option>
+                    <option value="54">可达鸭</option>
+                    <option value="55">哥达鸭</option>
+                    <option value="79">呆呆兽</option>
+                    <option value="80">呆壳兽</option>
+                    <option value="199">呆呆王</option>
+                    <option value="134">水伊布</option>
+                    <option value="158">小锯鳄</option>
+                    <option value="159">蓝鳄</option>
+                    <option value="160">大力鳄</option>
+                    <option value="194">乌波</option>
+                    <option value="195">沼王</option>
+                    <option value="245">水君</option>
+                    <option value="912">润水鸭</option>
+                    <option value="913">涌水鸭</option>
+                </optgroup>
+                <optgroup label="格斗系">
+                    <option value="56">猴怪</option>
+                    <option value="57">火暴猴</option>
+                    <option value="447">利欧路</option>
+                    <option value="448">路卡利欧</option>
+                    <option value="475">艾路雷朵</option>
+                    <option value="759">童偶熊</option>
+                    <option value="760">穿着熊</option>
+                    <option value="914">狂欢浪舞鸭</option>
+                </optgroup>
+                <optgroup label="电系">
+                    <option value="25">皮卡丘</option>
+                    <option value="26">雷丘</option>
+                    <option value="135">雷伊布</option>
+                    <option value="172">皮丘</option>
+                    <option value="179">咩利羊</option>
+                    <option value="180">茸茸羊</option>
+                    <option value="181">电龙</option>
+                    <option value="243">雷公</option>
+                    <option value="702">咚咚鼠</option>
+                    <option value="9001">皮卡丘（佳节）</option>
+                    <option value="9002">皮卡丘（万圣节）</option>
+                    <option value="921">布拨</option>
+                    <option value="922">布土拨</option>
+                    <option value="923">巴布土拨</option>
+                    <option value="403">小猫怪</option>
+                    <option value="404">勒克猫</option>
+                    <option value="405">伦琴猫</option>
+                </optgroup>
+                <optgroup label="超能力系">
+                    <option value="122">魔墙人偶</option>
+                    <option value="196">太阳伊布</option>
+                    <option value="280">拉鲁拉丝</option>
+                    <option value="281">奇鲁莉安</option>
+                    <option value="282">沙奈朵</option>
+                    <option value="360">小果然</option>
+                    <option value="202">果然翁</option>
+                    <option value="517">魔尼尼</option>
+                    <option value="518">食梦梦</option>
+                    <option value="519">梦梦蚀</option>
+                </optgroup>
+                <optgroup label="一般系">
+                    <option value="19">小拉达</option>
+                    <option value="20">拉达</option>
+                    <option value="52">喵喵</option>
+                    <option value="53">猫老大</option>
+                    <option value="115">袋兽</option>
+                    <option value="132">百变怪</option>
+                    <option value="133">伊布</option>
+                    <option value="287">懒人獭</option>
+                    <option value="288">过动猿</option>
+                    <option value="289">请假王</option>
+                    <option value="9004">伊布（佳节）</option>
+                </optgroup>
+                <optgroup label="幽灵系">
+                    <option value="92">鬼斯</option>
+                    <option value="93">鬼斯通</option>
+                    <option value="94">耿鬼</option>
+                    <option value="353">怨影娃娃</option>
+                    <option value="354">诅咒娃娃</option>
+                    <option value="425">飘飘球</option>
+                    <option value="426">随风球</option>
+                    <option value="778">谜拟Q</option>
+                    <option value="911">骨纹巨声鳄</option>
+                </optgroup>
+                <optgroup label="岩石系">
+                    <option value="74">小拳石</option>
+                    <option value="75">隆隆石</option>
+                    <option value="76">隆隆岩</option>
+                    <option value="95">大岩蛇</option>
+                    <option value="185">树才怪</option>
+                    <option value="438">盆才怪</option>
+                    <option value="246">幼基拉斯</option>
+                    <option value="247">沙基拉斯</option>
+                </optgroup>
+                <optgroup label="钢系">
+                    <option value="81">小磁怪</option>
+                    <option value="82">三合一磁怪</option>
+                    <option value="208">大钢蛇</option>
+                    <option value="304">可可多拉</option>
+                    <option value="305">可多拉</option>
+                    <option value="306">波士可多拉</option>
+                    <option value="462">自爆磁怪</option>
+                </optgroup>
+                <optgroup label="恶系">
+                    <option value="215">狃拉</option>
+                    <option value="228">戴鲁比</option>
+                    <option value="229">黑鲁加</option>
+                    <option value="302">勾魂眼</option>
+                    <option value="359">阿勃梭鲁</option>
+                    <option value="461">玛狃拉</option>
+                    <option value="908">魔幻假面喵</option>
+                    <option value="248">班基拉斯</option>
+                    <option value="197">月亮伊布</option>
+                </optgroup>
+                <optgroup label="毒系">
+                    <option value="23">阿柏蛇</option>
+                    <option value="24">阿柏怪</option>
+                    <option value="316">溶食兽</option>
+                    <option value="317">吞食兽</option>
+                    <option value="980">土王</option>
+                    <option value="453">不良蛙</option>
+                    <option value="454">毒骷蛙</option>
+                    <option value="7054">乌波（帕底亚的样子）</option>
+                </optgroup>
+                <optgroup label="地面系">
+                    <option value="50">地鼠</option>
+                    <option value="51">三地鼠</option>
+                    <option value="104">卡拉卡拉</option>
+                    <option value="105">嘎啦嘎啦</option>
+                </optgroup>
+                <optgroup label="虫系">
+                    <option value="10">绿毛虫</option>
+                    <option value="11">铁甲蛹</option>
+                    <option value="12">巴大蝶</option>
+                    <option value="127">凯罗斯</option>
+                    <option value="214">赫拉克罗斯</option>
+                    <option value="736">强颚鸡母虫</option>
+                    <option value="737">虫电宝</option>
+                    <option value="738">锹农炮虫</option>
+                </optgroup>
+                <optgroup label="冰系">
+                    <option value="363">海豹球</option>
+                    <option value="364">海魔狮</option>
+                    <option value="365">帝牙海狮</option>
+                    <option value="459">雪笠怪</option>
+                    <option value="460">暴雪王</option>
+                    <option value="471">冰伊布</option>
+                    <option value="7006">六尾（阿罗拉的样子）</option>
+                    <option value="7007">九尾（阿罗拉的样子）</option>
+                </optgroup>
+                <optgroup label="飞行系">
+                    <option value="84">嘟嘟</option>
+                    <option value="85">嘟嘟利</option>
+                    <option value="333">青绵鸟</option>
+                    <option value="627">毛头小鹰</option>
+                    <option value="628">勇士雄鹰</option>
+                    <option value="225">信使鸟</option>
+                    <option value="845">古月鸟</option>
+                </optgroup>
+                <optgroup label="龙系">
+                    <option value="334">七夕青鸟</option>
+                    <option value="147">迷你龙</option>
+                    <option value="148">哈克龙</option>
+                    <option value="149">快龙</option>
+                </optgroup>
+                <optgroup label="妖精系">
+                    <option value="35">皮皮</option>
+                    <option value="36">皮可西</option>
+                    <option value="39">胖丁</option>
+                    <option value="40">胖可丁</option>
+                    <option value="173">皮宝宝</option>
+                    <option value="174">宝宝丁</option>
+                    <option value="175">波克比</option>
+                    <option value="176">波克基古</option>
+                    <option value="468">波克基斯</option>
+                    <option value="700">仙子伊布</option>
+                    <option value="764">花疗环环</option>
+                </optgroup>
+            </select>
+
+            <label for="pokemonCategory">宝可梦类型:</label>
+            <select id="pokemonCategory" disabled>
+                <option value="ingredient">食材型</option>
+                <option value="skill">技能型</option>
+                <option value="berry">树果型</option>
+            </select>
+
+            <label for="isShiny">是否为闪光宝可梦:</label>
+            <select id="isShiny">
+                <option value="false">否</option>
+                <option value="true">是</option>
+            </select>
+
+            <label for="ingredientType1">食材类型1:</label>
+            <select id="ingredientType1">
+                <option value="milk">哞哞鲜奶</option>
+                <option value="honey">甜甜蜜</option>
+                <option value="cacao">放松可可</option>
+                <option value="apple">特选苹果</option>
+                <option value="mushroom">品鲜蘑菇</option>
+                <option value="herb">火辣香草</option>
+                <option value="egg">特选蛋</option>
+                <option value="potato">窝心洋芋</option>
+                <option value="tomato">好眠番茄</option>
+                <option value="wheat">粗枝大葱</option>
+                <option value="corn">萌绿玉米</option>
+                <option value="soybean">萌绿大豆</option>
+                <option value="coffee">醒脑咖啡豆</option>
+                <option value="tail">美味尾巴</option>
+                <option value="ginger">暖暖姜</option>
+                <option value="oil">纯粹油</option>
+                <option value="tofu">豆制肉</option>
+            </select>
+
+            <label for="ingredientType2">食材类型2:</label>
+            <select id="ingredientType2">
+                <option value="milk">哞哞鲜奶</option>
+                <option value="honey">甜甜蜜</option>
+                <option value="cacao">放松可可</option>
+                <option value="apple">特选苹果</option>
+                <option value="mushroom">品鲜蘑菇</option>
+                <option value="herb">火辣香草</option>
+                <option value="egg">特选蛋</option>
+                <option value="potato">窝心洋芋</option>
+                <option value="tomato">好眠番茄</option>
+                <option value="wheat">粗枝大葱</option>
+                <option value="corn">萌绿玉米</option>
+                <option value="soybean">萌绿大豆</option>
+                <option value="coffee">醒脑咖啡豆</option>
+                <option value="tail">美味尾巴</option>
+                <option value="ginger">暖暖姜</option>
+                <option value="oil">纯粹油</option>
+                <option value="tofu">豆制肉</option>
+            </select>
+
+            <label for="ingredientType3">食材类型3:</label>
+            <select id="ingredientType3">
+                <option value="milk">哞哞鲜奶</option>
+                <option value="honey">甜甜蜜</option>
+                <option value="cacao">放松可可</option>
+                <option value="apple">特选苹果</option>
+                <option value="mushroom">品鲜蘑菇</option>
+                <option value="herb">火辣香草</option>
+                <option value="egg">特选蛋</option>
+                <option value="potato">窝心洋芋</option>
+                <option value="tomato">好眠番茄</option>
+                <option value="wheat">粗枝大葱</option>
+                <option value="corn">萌绿玉米</option>
+                <option value="soybean">萌绿大豆</option>
+                <option value="coffee">醒脑咖啡豆</option>
+                <option value="tail">美味尾巴</option>
+                <option value="ginger">暖暖姜</option>
+                <option value="oil">纯粹油</option>
+                <option value="tofu">豆制肉</option>
+            </select>
+
+            <label for="nature">宝可梦性格:</label>
+            <select id="nature">
+                <optgroup label="无加成性格">
+                    <option value="timid">害羞（×，×）</option>
+                    <option value="hardy">勤奋（×，×）</option>
+                    <option value="docile">坦率（×，×）</option>
+                    <option value="hasty">浮躁（×，×）</option>
+                    <option value="serious">认真（×，×）</option>
+                </optgroup>
+                <optgroup label="活力回复量↑">
+                    <option value="relaxed">悠闲（活力回复量↑，exp↓）</option>
+                    <option value="bold">大胆（活力回复量↑，帮忙速度↓）</option>
+                    <option value="jolly">乐天（活力回复量↑，主技能发动机率↓）</option>
+                    <option value="naughty">淘气（活力回复量↑，食材发现率↓）</option>
+                </optgroup>
+                <optgroup label="exp↑">
+                    <option value="rash">急躁（exp↑，活力回复量↓）</option>
+                    <option value="timid">胆小（exp↑，帮忙速度↓）</option>
+                    <option value="naive">天真（exp↑，主技能发动机率↓）</option>
+                    <option value="jolly">爽朗（exp↑，食材发现率↓）</option>
+                </optgroup>
+                <optgroup label="帮忙速度↑">
+                    <option value="lonely">怕寂寞（帮忙速度↑，活力回复量↓）</option>
+                    <option value="brave">勇敢（帮忙速度↑，exp↓）</option>
+                    <option value="naughty">顽皮（帮忙速度↑，主技能发动机率↓）</option>
+                    <option value="adamant">固执（帮忙速度↑，食材发现率↓）</option>
+                </optgroup>
+                <optgroup label="主技能发动机率↑">
+                    <option value="gentle">温顺（主技能发动机率↑，活力回复量↓）</option>
+                    <option value="modest">自大（主技能发动机率↑，exp↓）</option>
+                    <option value="calm">温和（主技能发动机率↑，帮忙速度↓）</option>
+                    <option value="careful">慎重（主技能发动机率↑，食材发现率↓）</option>
+                </optgroup>
+                <optgroup label="食材发现率↑">
+                    <option value="sassy">慢吞吞（食材发现率↑，活力回复量↓）</option>
+                    <option value="quiet">冷静（食材发现率↑，exp↓）</option>
+                    <option value="modest">内敛（食材发现率↑，帮忙速度↓）</option>
+                    <option value="rash">马虎（食材发现率↑，主技能发动机率↓）</option>
+                </optgroup>
+            </select>
+
+            <h3>副技能选择</h3>
+            
+            <!-- 特殊技能 -->
+            <div class="subskill-section">
+                <div class="subskill-section-title">特殊</div>
+                <div class="subskill-group">
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="berryS" value="berryS">
+                        <label for="berryS">树果数量S</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="sleepExp" value="sleepExp">
+                        <label for="sleepExp">睡眠EXP奖励</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="helperBonus" value="helperBonus">
+                        <label for="helperBonus">帮手奖励</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="researchExp" value="researchExp">
+                        <label for="researchExp">研究EXP奖励</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="dreamShard" value="dreamShard">
+                        <label for="dreamShard">梦之碎片奖励</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="energyRecovery" value="energyRecovery">
+                        <label for="energyRecovery">活力回复奖励</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 帮速技能 -->
+            <div class="subskill-section">
+                <div class="subskill-section-title">帮速</div>
+                <div class="subskill-group">
+                    <div class="subskill-item subskill-white">
+                        <input type="checkbox" id="helpSpeedS" value="helpSpeedS">
+                        <label for="helpSpeedS">帮忙速度S</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="helpSpeedM" value="helpSpeedM">
+                        <label for="helpSpeedM">帮忙速度M</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 持有上限提升技能 -->
+            <div class="subskill-section">
+                <div class="subskill-section-title">持有上限提升</div>
+                <div class="subskill-group">
+                    <div class="subskill-item subskill-white">
+                        <input type="checkbox" id="inventoryUpS" value="inventoryUpS">
+                        <label for="inventoryUpS">持有上限提升S</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="inventoryUpM" value="inventoryUpM">
+                        <label for="inventoryUpM">持有上限提升M</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="inventoryUpL" value="inventoryUpL">
+                        <label for="inventoryUpL">持有上限提升L</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 技能等级技能 -->
+            <div class="subskill-section">
+                <div class="subskill-section-title">技能等级</div>
+                <div class="subskill-group">
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="skillLevelUpS" value="skillLevelUpS">
+                        <label for="skillLevelUpS">技能等级提升S</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="skillLevelUpM" value="skillLevelUpM">
+                        <label for="skillLevelUpM">技能等级提升M</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 食材机率技能 -->
+            <div class="subskill-section">
+                <div class="subskill-section-title">食材机率</div>
+                <div class="subskill-group">
+                    <div class="subskill-item subskill-white">
+                        <input type="checkbox" id="ingredientChanceS" value="ingredientChanceS">
+                        <label for="ingredientChanceS">食材机率提升S</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="ingredientChanceM" value="ingredientChanceM">
+                        <label for="ingredientChanceM">食材机率提升M</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 技能机率技能 -->
+            <div class="subskill-section">
+                <div class="subskill-section-title">技能机率</div>
+                <div class="subskill-group">
+                    <div class="subskill-item subskill-white">
+                        <input type="checkbox" id="skillChanceS" value="skillChanceS">
+                        <label for="skillChanceS">技能机率提升S</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="skillChanceM" value="skillChanceM">
+                        <label for="skillChanceM">技能机率提升M</label>
+                    </div>
+                </div>
+            </div>
+            
+            <button onclick="calculatePokemonScore()">计算宝可梦评分</button>
+            
+            <div id="pokemonScoreResult" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        function calculatePokemonScore() {
+            const pokemonName = document.getElementById('pokemonName').value;
+            const pokemonCategory = document.getElementById('pokemonCategory').value;
+            const ingredientType1 = document.getElementById('ingredientType1').value;
+            const ingredientType2 = document.getElementById('ingredientType2').value;
+            const ingredientType3 = document.getElementById('ingredientType3').value;
+            const nature = document.getElementById('nature').value;
+
+            // 获取选中的副技能
+            const selectedSubskills = [];
+            const subskillCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            subskillCheckboxes.forEach(checkbox => {
+                selectedSubskills.push(checkbox.value);
+            });
+
+            // 基础分数计算
+            let baseScore = 0; // 基础分0
+
+            // 闪光加成
+            const isShiny = document.getElementById('isShiny').value === 'true';
+            if (isShiny) {
+                baseScore += 0.5; // 闪光宝可梦额外加0.5分
+            }
+
+            // 副技能评分
+            let subskillScore = 0;
+            const hasIngredientChanceM = selectedSubskills.includes('ingredientChanceM');
+
+            // 根据宝可梦类型设置不同的副技能评分
+            if (pokemonCategory === 'ingredient') {
+                // 食材型宝可梦的副技能评分
+                selectedSubskills.forEach(skill => {
+                    switch(skill) {
+                        case 'ingredientChanceM':
+                            subskillScore += 1.6;
+                            break;
+                        case 'ingredientChanceS':
+                            subskillScore += 0.7;
+                            break;
+                        case 'helpSpeedM':
+                            subskillScore += 0.9;
+                            break;
+                        case 'helpSpeedS':
+                            subskillScore += 0.4;
+                            break;
+                        case 'berryS':
+                            subskillScore += 0.2;
+                            break;
+                        case 'sleepExp':
+                            subskillScore += 0.3;
+                            break;
+                        case 'helperBonus':
+                            subskillScore += hasIngredientChanceM ? 1.3 : 0.3;
+                            break;
+                        case 'inventoryUpS':
+                            subskillScore += hasIngredientChanceM ? 0.2 : 0.1;
+                            break;
+                        case 'inventoryUpM':
+                            subskillScore += hasIngredientChanceM ? 0.4 : 0.2;
+                            break;
+                        case 'inventoryUpL':
+                            subskillScore += hasIngredientChanceM ? 0.6 : 0.3;
+                            break;
+                    }
+                });
+            } else if (pokemonCategory === 'skill') {
+                // 技能型宝可梦的副技能评分
+                const hasSkillChanceM = selectedSubskills.includes('skillChanceM');
+                const hasBerryS = selectedSubskills.includes('berryS');
+                const specialBerryPokemon = ['179', '180', '181', '196', '185', '438', '54', '55', '627', '628', '778', '475', '58', '59', '135', '244', '245', '243'];
+                const isSpecialBerryPokemon = specialBerryPokemon.includes(pokemonName);
+
+                selectedSubskills.forEach(skill => {
+                    switch(skill) {
+                        case 'skillChanceM':
+                            subskillScore += 1.6;
+                            break;
+                        case 'skillChanceS':
+                            subskillScore += 0.7;
+                            break;
+                        case 'helpSpeedM':
+                            subskillScore += 0.9;
+                            break;
+                        case 'helpSpeedS':
+                            subskillScore += 0.4;
+                            break;
+                        case 'inventoryUpL':
+                            subskillScore += 0.1;
+                            break;
+                        case 'inventoryUpM':
+                            subskillScore += 0.1;
+                            break;
+                        case 'inventoryUpS':
+                            subskillScore += 0.1;
+                            break;
+                        case 'skillLevelUpM':
+                            subskillScore += 0.4;
+                            break;
+                        case 'skillLevelUpS':
+                            subskillScore += 0.2;
+                            break;
+                        case 'sleepExp':
+                            subskillScore += 0.3;
+                            break;
+                        case 'helperBonus':
+                            subskillScore += hasSkillChanceM ? 1.3 : 0.3;
+                            break;
+                        case 'berryS':
+                            subskillScore += isSpecialBerryPokemon ? 0.56 : 0.2;
+                            break;
+                    }
+                });
+            } else {
+                // 树果型宝可梦的副技能评分
+                const hasBerryS = selectedSubskills.includes('berryS');
+                selectedSubskills.forEach(skill => {
+                    switch(skill) {
+                        case 'berryS':
+                            subskillScore += 1.8;
+                            break;
+                        case 'helpSpeedM':
+                            subskillScore += 1.2;
+                            break;
+                        case 'helpSpeedS':
+                            subskillScore += 0.6;
+                            break;
+                        case 'sleepExp':
+                            subskillScore += 0.5;
+                            break;
+                        case 'helperBonus':
+                            subskillScore += hasBerryS ? 1.3 : 0.5;
+                            break;
+                        case 'inventoryUpS':
+                            subskillScore += hasIngredientChanceM ? 0.2 : 0.1;
+                            break;
+                        case 'inventoryUpM':
+                            subskillScore += hasIngredientChanceM ? 0.4 : 0.2;
+                            break;
+                        case 'inventoryUpL':
+                            subskillScore += hasIngredientChanceM ? 0.6 : 0.3;
+                            break;
+                    }
+                });
+
+                // 如果没有树果数量S，减去2.5分
+                if (!hasBerryS) {
+                    subskillScore -= 2.5;
+                }
+            }
+
+            baseScore += subskillScore;
+
+            // 性格加成
+            const natureMultipliers = {
+                // 无加成性格
+                'timid': 1.0,    // 害羞
+                'hardy': 1.0,    // 勤奋
+                'docile': 1.0,   // 坦率
+                'hasty': 1.0,    // 浮躁
+                'serious': 1.0,  // 认真
+                // 活力回复量加成
+                'relaxed': 1.0,  // 悠闲
+                'bold': 1.0,     // 大胆
+                'jolly': 1.0,    // 乐天
+                'naughty': 1.0,  // 淘气
+                // exp获得量加成
+                'rash': 1.0,     // 急躁
+                'timid': 1.0,    // 胆小
+                'naive': 1.0,    // 天真
+                'jolly': 1.0,    // 爽朗
+                // 帮忙速度加成
+                'lonely': 1.0,   // 怕寂寞
+                'brave': 1.0,    // 勇敢
+                'naughty': 1.0,  // 顽皮
+                'adamant': 1.0,  // 固执
+                // 主技能发动机率加成
+                'gentle': 1.0,   // 温顺
+                'modest': 1.0,   // 自大
+                'calm': 1.0,     // 温和
+                'careful': 1.0,  // 慎重
+                // 食材发现率加成
+                'sassy': 1.0,    // 慢吞吞
+                'quiet': 1.0,    // 冷静
+                'modest': 0.5,   // 内敛
+                'rash': 1.0      // 马虎
+            };
+
+            // 根据宝可梦类型添加性格加分
+            if (pokemonCategory === 'ingredient') {
+                // 食材型宝可梦的性格加分
+                if (['sassy', 'quiet', 'modest', 'rash'].includes(nature)) {
+                    baseScore += 1.0;
+                } else if (nature === 'jolly') {
+                    baseScore -= 1.0;
+                } else if (nature === 'bold') {
+                    baseScore -= 0.6;
+                } else if (nature === 'adamant') {
+                    baseScore -= 0.4;
+                }
+
+                // 检查三个食材类型是否相同
+                if (ingredientType1 === ingredientType2 && ingredientType2 === ingredientType3) {
+                    baseScore += 0.8;
+                }
+            } else if (pokemonCategory === 'skill') {
+                // 技能型宝可梦的性格加分
+                if (['gentle', 'modest', 'calm', 'careful'].includes(nature)) {
+                    if (nature === 'calm') {
+                        baseScore += 0.5;
+                    } else {
+                        baseScore += 1.0;
+                    }
+                } else if (['lonely', 'brave', 'naughty', 'adamant'].includes(nature)) {
+                    baseScore += 0.6;
+                } else if (nature === 'naive') {
+                    baseScore -= 1.0;
+                } else if (nature === 'bold') {
+                    baseScore -= 0.6;
+                } else if (nature === 'naughty') {
+                    baseScore -= 0.4;
+                }
+            } else {
+                // 树果型宝可梦的性格加分
+                if (['lonely', 'brave', 'naughty', 'adamant'].includes(nature)) {
+                    baseScore += 1.0;
+                }
+            }
+
+            // 计算总分
+            const totalScore = baseScore; // 移除Math.round，保留小数点
+            const maxScore = 100; // 调整最大分数为100
+
+            // 计算百分比
+            const scorePercentage = Math.min((totalScore / maxScore) * 100, 100);
+
+            // 评价等级
+            let evaluation = '';
+            if (totalScore >= 5.5) {
+                evaluation = '您就是pvp的宝可梦真神！';
+            } else if (totalScore >= 4.5) {
+                evaluation = '极品！快拿去秀吧';
+            } else if (totalScore >= 3.5) {
+                evaluation = '很优秀了';
+            } else if (totalScore >= 2.5) {
+                evaluation = '恭喜，你的宝合格了';
+            } else if (totalScore >= 1.5) {
+                evaluation = '可以用了';
+            } else {
+                evaluation = '还是送给博士吧';
+            }
+
+            const resultDiv = document.getElementById('pokemonScoreResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <h3>宝可梦评分结果：</h3>
+                <p>宝可梦：${document.getElementById('pokemonName').options[document.getElementById('pokemonName').selectedIndex].text}</p>
+                <p>类型：${document.getElementById('pokemonCategory').options[document.getElementById('pokemonCategory').selectedIndex].text}</p>
+                <p>是否闪光：${isShiny ? '是' : '否'}</p>
+                <p>食材类型：${document.getElementById('ingredientType1').options[document.getElementById('ingredientType1').selectedIndex].text}、${document.getElementById('ingredientType2').options[document.getElementById('ingredientType2').selectedIndex].text}、${document.getElementById('ingredientType3').options[document.getElementById('ingredientType3').selectedIndex].text}</p>
+                <p>性格：${document.getElementById('nature').options[document.getElementById('nature').selectedIndex].text}</p>
+                <p>副技能：${selectedSubskills.length > 0 ? selectedSubskills.map(skill => {
+                    const skillNames = {
+                        'berryS': '树果数量S',
+                        'helperBonus': '帮手奖励',
+                        'sleepExp': '睡眠exp奖励',
+                        'researchExp': '研究exp奖励',
+                        'dreamShard': '梦之碎片奖励',
+                        'energyRecovery': '活力回复奖励',
+                        'helpSpeedM': '帮忙速度M',
+                        'inventoryUpM': '持有上限提升M',
+                        'inventoryUpL': '持有上限提升L',
+                        'skillLevelUpM': '技能等级提升M',
+                        'ingredientChanceM': '食材机率提升M',
+                        'skillChanceM': '技能机率提升M',
+                        'helpSpeedS': '帮忙速度S',
+                        'inventoryUpS': '持有上限提升S',
+                        'ingredientChanceS': '食材机率提升S',
+                        'skillChanceS': '技能机率提升S'
+                    };
+                    return skillNames[skill];
+                }).join('、') : '无'}</p>
+                <div class="rating-bar">
+                    <div class="rating-fill" style="width: ${scorePercentage}%"></div>
+                </div>
+                <p>总分：${totalScore.toFixed(1)}分</p>
+                <p>评价：${evaluation}</p>
+                <p>详细分析：</p>
+                <ul>
+                    ${isShiny ? '<li>闪光加成：0.5分</li>' : ''}
+                    <li>副技能得分：${subskillScore.toFixed(1)}分</li>
+                    <li>性格加成：${(['sassy', 'quiet', 'modest', 'rash'].includes(nature) && pokemonCategory === 'ingredient') ? '1.0分' : 
+                                    (nature === 'jolly' && pokemonCategory === 'ingredient') ? '-1.0分' :
+                                    (nature === 'bold' && pokemonCategory === 'ingredient') ? '-0.6分' :
+                                    (nature === 'adamant' && pokemonCategory === 'ingredient') ? '-0.4分' :
+                                    (nature === 'calm' && pokemonCategory === 'skill') ? '0.5分' :
+                                    (['gentle', 'modest', 'careful'].includes(nature) && pokemonCategory === 'skill') ? '1.0分' :
+                                    (['lonely', 'brave', 'adamant'].includes(nature) && pokemonCategory === 'skill') ? '0.6分' :
+                                    (nature === 'naive' && pokemonCategory === 'skill') ? '-1.0分' :
+                                    (nature === 'bold' && pokemonCategory === 'skill') ? '-0.6分' :
+                                    (nature === 'naughty' && pokemonCategory === 'skill') ? '-0.4分' :
+                                    (nature === 'adamant' && pokemonCategory === 'berry') ? '1.2分' :
+                                    (['lonely', 'brave', 'naughty'].includes(nature) && pokemonCategory === 'berry') ? '0.9分' :
+                                    (['rash', 'timid', 'naive', 'jolly'].includes(nature) && pokemonCategory === 'berry') ? '0.5分' : '0分'}</li>
+                </ul>
+            `;
+        }
+
+        function updatePokemonType() {
+            const pokemonSelect = document.getElementById('pokemonName');
+            const selectedOption = pokemonSelect.options[pokemonSelect.selectedIndex];
+            if (selectedOption.value) {
+                const pokemonId = selectedOption.value;
+                const pokemonCategory = document.getElementById('pokemonCategory');
+                
+                // 宝可梦类型映射
+                const pokemonTypes = {
+                    '1': 'ingredient', '2': 'ingredient', '3': 'ingredient',
+                    '4': 'ingredient', '5': 'ingredient', '6': 'ingredient',
+                    '7': 'ingredient', '8': 'ingredient', '9': 'ingredient',
+                    '10': 'berry', '11': 'berry', '12': 'berry',
+                    '19': 'berry', '20': 'berry', '23': 'berry',
+                    '24': 'berry', '25': 'berry', '26': 'berry',
+                    '35': 'berry', '36': 'berry', '37': 'berry',
+                    '38': 'berry', '39': 'skill', '40': 'skill',
+                    '50': 'ingredient', '51': 'ingredient', '52': 'skill',
+                    '53': 'skill', '54': 'skill', '55': 'skill',
+                    '56': 'berry', '57': 'berry', '58': 'skill',
+                    '59': 'skill', '69': 'ingredient', '70': 'ingredient',
+                    '71': 'ingredient', '74': 'ingredient', '75': 'ingredient',
+                    '76': 'ingredient', '79': 'skill', '80': 'skill',
+                    '81': 'skill', '82': 'skill', '84': 'berry',
+                    '85': 'berry', '92': 'ingredient', '93': 'ingredient',
+                    '94': 'ingredient', '95': 'berry', '104': 'berry',
+                    '105': 'berry', '115': 'ingredient', '122': 'ingredient',
+                    '127': 'ingredient', '132': 'ingredient', '133': 'skill',
+                    '134': 'skill', '135': 'skill', '136': 'skill',
+                    '147': 'ingredient', '148': 'ingredient', '149': 'ingredient',
+                    '152': 'ingredient', '153': 'ingredient', '154': 'ingredient',
+                    '155': 'ingredient', '156': 'ingredient', '157': 'ingredient',
+                    '158': 'ingredient', '159': 'ingredient', '160': 'ingredient',
+                    '172': 'ingredient', '173': 'ingredient', '174': 'skill',
+                    '175': 'skill', '176': 'skill', '179': 'skill',
+                    '180': 'skill', '181': 'skill', '185': 'skill',
+                    '194': 'ingredient', '195': 'ingredient', '196': 'skill',
+                    '197': 'skill', '199': 'skill', '202': 'skill',
+                    '208': 'ingredient', '214': 'skill', '215': 'ingredient',
+                    '225': 'ingredient', '228': 'ingredient', '229': 'ingredient',
+                    '243': 'skill', '244': 'skill', '245': 'skill',
+                    '246': 'ingredient', '247': 'ingredient', '248': 'ingredient',
+                    '280': 'skill', '281': 'skill', '282': 'skill',
+                    '287': 'ingredient', '288': 'ingredient', '289': 'ingredient',
+                    '302': 'skill', '304': 'ingredient', '305': 'ingredient',
+                    '306': 'ingredient', '316': 'skill', '317': 'skill',
+                    '333': 'ingredient', '334': 'ingredient', '353': 'ingredient',
+                    '354': 'ingredient', '359': 'ingredient', '360': 'skill',
+                    '363': 'ingredient', '364': 'ingredient', '365': 'ingredient',
+                    '403': 'ingredient', '404': 'ingredient', '405': 'ingredient',
+                    '425': 'ingredient', '426': 'ingredient', '438': 'ingredient',
+                    '439': 'ingredient', '447': 'skill', '448': 'skill',
+                    '453': 'ingredient', '454': 'ingredient', '459': 'ingredient',
+                    '460': 'ingredient', '461': 'ingredient', '462': 'skill',
+                    '468': 'skill', '470': 'skill', '471': 'skill',
+                    '475': 'skill', '517': 'ingredient', '518': 'ingredient',
+                    '627': 'skill', '628': 'skill', '700': 'skill',
+                    '702': 'skill', '736': 'ingredient', '737': 'ingredient',
+                    '738': 'ingredient', '759': 'ingredient', '760': 'ingredient',
+                    '764': 'ingredient', '778': 'skill', '845': 'ingredient',
+                    '906': 'ingredient', '907': 'ingredient', '908': 'ingredient',
+                    '909': 'ingredient', '910': 'ingredient', '911': 'ingredient',
+                    '912': 'ingredient', '913': 'ingredient', '914': 'ingredient',
+                    '921': 'skill', '922': 'skill', '923': 'skill',
+                    '980': 'ingredient', '7006': 'ingredient', '7007': 'ingredient',
+                    '7054': 'ingredient', '9001': 'ingredient', '9002': 'ingredient',
+                    '9004': 'ingredient'
+                };
+
+                // 设置宝可梦类型
+                pokemonCategory.value = pokemonTypes[pokemonId] || 'ingredient';
+                
+                // 更新食材类型
+                updateIngredientTypes();
+            }
+        }
+
+        function updateIngredientTypes() {
+            const pokemonSelect = document.getElementById('pokemonName');
+            const selectedOption = pokemonSelect.options[pokemonSelect.selectedIndex];
+            if (selectedOption.value) {
+                const pokemonId = selectedOption.value;
+                const ingredients = getPokemonIngredients(pokemonId);
+                
+                // 更新第一个食材类型（固定为第一个选项）
+                const ingredientType1Select = document.getElementById('ingredientType1');
+                ingredientType1Select.innerHTML = '';
+                const option1 = document.createElement('option');
+                option1.value = getIngredientValue(ingredients[0]);
+                option1.text = ingredients[0];
+                ingredientType1Select.appendChild(option1);
+                
+                // 更新第二个食材类型（可以选择前两个选项）
+                const ingredientType2Select = document.getElementById('ingredientType2');
+                ingredientType2Select.innerHTML = '';
+                for (let i = 0; i < Math.min(2, ingredients.length); i++) {
+                    const option = document.createElement('option');
+                    option.value = getIngredientValue(ingredients[i]);
+                    option.text = ingredients[i];
+                    ingredientType2Select.appendChild(option);
+                }
+                
+                // 更新第三个食材类型（可以选择前三个选项）
+                const ingredientType3Select = document.getElementById('ingredientType3');
+                ingredientType3Select.innerHTML = '';
+                for (let i = 0; i < Math.min(3, ingredients.length); i++) {
+                    const option = document.createElement('option');
+                    option.value = getIngredientValue(ingredients[i]);
+                    option.text = ingredients[i];
+                    ingredientType3Select.appendChild(option);
+                }
+
+                // 自动选择第一个选项
+                ingredientType1Select.value = getIngredientValue(ingredients[0]);
+                ingredientType2Select.value = getIngredientValue(ingredients[0]);
+                ingredientType3Select.value = getIngredientValue(ingredients[0]);
+            }
+        }
+
+        function getPokemonIngredients(pokemonId) {
+            const pokemonIngredients = {
+                '1': ['甜甜蜜', '好眠番茄', '窝心洋芋'],
+                '2': ['甜甜蜜', '好眠番茄', '窝心洋芋'],
+                '3': ['甜甜蜜', '好眠番茄', '窝心洋芋'],
+                '4': ['豆制肉', '暖暖姜', '火辣香草'],
+                '5': ['豆制肉', '暖暖姜', '火辣香草'],
+                '6': ['豆制肉', '暖暖姜', '火辣香草'],
+                '7': ['哞哞鲜奶', '放松可可', '豆制肉'],
+                '8': ['哞哞鲜奶', '放松可可', '豆制肉'],
+                '9': ['哞哞鲜奶', '放松可可', '豆制肉'],
+                '10': ['甜甜蜜', '好眠番茄', '萌绿大豆'],
+                '11': ['甜甜蜜', '好眠番茄', '萌绿大豆'],
+                '12': ['甜甜蜜', '好眠番茄', '萌绿大豆'],
+                '19': ['特选苹果', '萌绿大豆', '豆制肉'],
+                '20': ['特选苹果', '萌绿大豆', '豆制肉'],
+                '23': ['豆制肉', '特选蛋', '火辣香草'],
+                '24': ['豆制肉', '特选蛋', '火辣香草'],
+                '25': ['特选苹果', '暖暖姜', '特选蛋'],
+                '26': ['特选苹果', '暖暖姜', '特选蛋'],
+                '35': ['特选苹果', '甜甜蜜', '萌绿大豆'],
+                '36': ['特选苹果', '甜甜蜜', '萌绿大豆'],
+                '37': ['萌绿大豆', '萌绿玉米', '窝心洋芋'],
+                '38': ['萌绿大豆', '萌绿玉米', '窝心洋芋'],
+                '39': ['甜甜蜜', '纯粹油', '放松可可'],
+                '40': ['甜甜蜜', '纯粹油', '放松可可'],
+                '50': ['好眠番茄', '粗枝大葱', '萌绿大豆'],
+                '51': ['好眠番茄', '粗枝大葱', '萌绿大豆'],
+                '52': ['哞哞鲜奶', '豆制肉'],
+                '53': ['哞哞鲜奶', '豆制肉'],
+                '54': ['放松可可', '特选苹果', '豆制肉'],
+                '55': ['放松可可', '特选苹果', '豆制肉'],
+                '56': ['豆制肉', '品鲜蘑菇', '甜甜蜜'],
+                '57': ['豆制肉', '品鲜蘑菇', '甜甜蜜'],
+                '58': ['火辣香草', '豆制肉', '哞哞鲜奶'],
+                '59': ['火辣香草', '豆制肉', '哞哞鲜奶'],
+                '69': ['好眠番茄', '窝心洋芋', '粗枝大葱'],
+                '70': ['好眠番茄', '窝心洋芋', '粗枝大葱'],
+                '71': ['好眠番茄', '窝心洋芋', '粗枝大葱'],
+                '74': ['萌绿大豆', '窝心洋芋', '品鲜蘑菇'],
+                '75': ['萌绿大豆', '窝心洋芋', '品鲜蘑菇'],
+                '76': ['萌绿大豆', '窝心洋芋', '品鲜蘑菇'],
+                '79': ['放松可可', '美味尾巴', '好眠番茄'],
+                '80': ['放松可可', '美味尾巴', '好眠番茄'],
+                '81': ['纯粹油', '火辣香草'],
+                '82': ['纯粹油', '火辣香草'],
+                '84': ['萌绿大豆', '放松可可', '豆制肉'],
+                '85': ['萌绿大豆', '放松可可', '豆制肉'],
+                '92': ['火辣香草', '品鲜蘑菇', '纯粹油'],
+                '93': ['火辣香草', '品鲜蘑菇', '纯粹油'],
+                '94': ['火辣香草', '品鲜蘑菇', '纯粹油'],
+                '95': ['好眠番茄', '豆制肉', '窝心洋芋'],
+                '104': ['暖暖姜', '放松可可'],
+                '105': ['暖暖姜', '放松可可'],
+                '115': ['暖暖姜', '窝心洋芋', '萌绿大豆'],
+                '122': ['好眠番茄', '窝心洋芋', '粗枝大葱'],
+                '127': ['甜甜蜜', '特选苹果', '豆制肉'],
+                '132': ['纯粹油', '粗枝大葱', '美味尾巴'],
+                '133': ['哞哞鲜奶', '放松可可', '豆制肉'],
+                '134': ['哞哞鲜奶', '放松可可', '豆制肉'],
+                '135': ['哞哞鲜奶', '放松可可', '豆制肉'],
+                '136': ['哞哞鲜奶', '放松可可', '豆制肉'],
+                '147': ['火辣香草', '萌绿玉米', '纯粹油'],
+                '148': ['火辣香草', '萌绿玉米', '纯粹油'],
+                '149': ['火辣香草', '萌绿玉米', '纯粹油'],
+                '152': ['放松可可', '甜甜蜜', '粗枝大葱'],
+                '153': ['放松可可', '甜甜蜜', '粗枝大葱'],
+                '154': ['放松可可', '甜甜蜜', '粗枝大葱'],
+                '155': ['暖暖姜', '火辣香草', '纯粹油'],
+                '156': ['暖暖姜', '火辣香草', '纯粹油'],
+                '157': ['暖暖姜', '火辣香草', '纯粹油'],
+                '158': ['豆制肉', '纯粹油'],
+                '159': ['豆制肉', '纯粹油'],
+                '160': ['豆制肉', '纯粹油'],
+                '172': ['特选苹果', '暖暖姜', '特选蛋'],
+                '173': ['特选苹果', '甜甜蜜', '萌绿大豆'],
+                '174': ['甜甜蜜', '纯粹油', '放松可可'],
+                '175': ['特选蛋', '暖暖姜', '放松可可'],
+                '176': ['特选蛋', '暖暖姜', '放松可可'],
+                '179': ['火辣香草', '特选蛋'],
+                '180': ['火辣香草', '特选蛋'],
+                '181': ['火辣香草', '特选蛋'],
+                '185': ['好眠番茄', '萌绿大豆', '品鲜蘑菇'],
+                '194': ['品鲜蘑菇', '窝心洋芋', '豆制肉'],
+                '195': ['品鲜蘑菇', '窝心洋芋', '豆制肉'],
+                '196': ['哞哞鲜奶', '放松可可', '豆制肉'],
+                '197': ['哞哞鲜奶', '放松可可', '豆制肉'],
+                '199': ['放松可可', '美味尾巴', '好眠番茄'],
+                '202': ['特选苹果', '品鲜蘑菇', '纯粹油'],
+                '208': ['好眠番茄', '豆制肉', '窝心洋芋'],
+                '214': ['甜甜蜜', '品鲜蘑菇', '豆制肉'],
+                '215': ['豆制肉', '特选蛋', '萌绿大豆'],
+                '225': ['特选蛋', '特选苹果', '放松可可'],
+                '228': ['火辣香草', '暖暖姜', '粗枝大葱'],
+                '229': ['火辣香草', '暖暖姜', '粗枝大葱'],
+                '243': ['豆制肉', '火辣香草', '粗枝大葱'],
+                '244': ['纯粹油', '好眠番茄', '品鲜蘑菇'],
+                '245': ['特选苹果', '纯粹油', '萌绿玉米'],
+                '246': ['暖暖姜', '萌绿大豆', '豆制肉'],
+                '247': ['暖暖姜', '萌绿大豆', '豆制肉'],
+                '248': ['暖暖姜', '萌绿大豆', '豆制肉'],
+                '280': ['特选苹果', '萌绿玉米', '粗枝大葱'],
+                '281': ['特选苹果', '萌绿玉米', '粗枝大葱'],
+                '282': ['特选苹果', '萌绿玉米', '粗枝大葱'],
+                '287': ['好眠番茄', '甜甜蜜', '特选苹果'],
+                '288': ['好眠番茄', '甜甜蜜', '特选苹果'],
+                '289': ['好眠番茄', '甜甜蜜', '特选苹果'],
+                '302': ['纯粹油', '品鲜蘑菇', '放松可可'],
+                '304': ['豆制肉', '醒脑咖啡豆', '萌绿大豆'],
+                '305': ['豆制肉', '醒脑咖啡豆', '萌绿大豆'],
+                '306': ['豆制肉', '醒脑咖啡豆', '萌绿大豆'],
+                '316': ['萌绿大豆', '品鲜蘑菇', '甜甜蜜'],
+                '317': ['萌绿大豆', '品鲜蘑菇', '甜甜蜜'],
+                '333': ['特选蛋', '萌绿大豆', '特选苹果'],
+                '334': ['特选蛋', '萌绿大豆', '特选苹果'],
+                '353': ['纯粹油', '暖暖姜', '品鲜蘑菇'],
+                '354': ['纯粹油', '暖暖姜', '品鲜蘑菇'],
+                '359': ['放松可可', '特选苹果', '品鲜蘑菇'],
+                '360': ['特选苹果', '品鲜蘑菇', '纯粹油'],
+                '363': ['纯粹油', '豆制肉', '暖暖姜'],
+                '364': ['纯粹油', '豆制肉', '暖暖姜'],
+                '365': ['纯粹油', '豆制肉', '暖暖姜'],
+                '403': ['好眠番茄', '纯粹油', '醒脑咖啡豆'],
+                '404': ['好眠番茄', '纯粹油', '醒脑咖啡豆'],
+                '405': ['好眠番茄', '纯粹油', '醒脑咖啡豆'],
+                '425': ['萌绿玉米', '纯粹油', '窝心洋芋'],
+                '426': ['萌绿玉米', '纯粹油', '窝心洋芋'],
+                '438': ['好眠番茄', '萌绿大豆', '品鲜蘑菇'],
+                '439': ['好眠番茄', '窝心洋芋', '粗枝大葱'],
+                '447': ['纯粹油', '窝心洋芋', '特选蛋'],
+                '448': ['纯粹油', '窝心洋芋', '特选蛋'],
+                '453': ['纯粹油', '豆制肉'],
+                '454': ['纯粹油', '豆制肉'],
+                '459': ['好眠番茄', '特选蛋', '品鲜蘑菇'],
+                '460': ['好眠番茄', '特选蛋', '品鲜蘑菇'],
+                '461': ['豆制肉', '特选蛋', '萌绿大豆'],
+                '462': ['纯粹油', '火辣香草'],
+                '468': ['特选蛋', '暖暖姜', '放松可可'],
+                '470': ['哞哞鲜奶', '放松可可', '豆制肉'],
+                '471': ['哞哞鲜奶', '放松可可', '豆制肉'],
+                '475': ['特选苹果', '萌绿玉米', '粗枝大葱'],
+                '517': ['哞哞鲜奶', '甜甜蜜', '醒脑咖啡豆'],
+                '518': ['哞哞鲜奶', '甜甜蜜', '醒脑咖啡豆'],
+                '627': ['豆制肉', '萌绿玉米', '醒脑咖啡豆'],
+                '628': ['豆制肉', '萌绿玉米', '醒脑咖啡豆'],
+                '700': ['哞哞鲜奶', '放松可可', '豆制肉'],
+                '702': ['特选苹果', '放松可可', '萌绿玉米'],
+                '736': ['醒脑咖啡豆', '品鲜蘑菇', '甜甜蜜'],
+                '737': ['醒脑咖啡豆', '品鲜蘑菇', '甜甜蜜'],
+                '738': ['醒脑咖啡豆', '品鲜蘑菇', '甜甜蜜'],
+                '759': ['萌绿玉米', '豆制肉', '特选蛋'],
+                '760': ['萌绿玉米', '豆制肉', '特选蛋'],
+                '764': ['萌绿玉米', '暖暖姜', '放松可可'],
+                '778': ['特选苹果', '醒脑咖啡豆', '品鲜蘑菇'],
+                '845': ['纯粹油', '窝心洋芋', '特选蛋'],
+                '906': ['窝心洋芋', '哞哞鲜奶', '暖暖姜'],
+                '907': ['窝心洋芋', '哞哞鲜奶', '暖暖姜'],
+                '908': ['窝心洋芋', '哞哞鲜奶', '暖暖姜'],
+                '909': ['特选苹果', '豆制肉', '火辣香草'],
+                '910': ['特选苹果', '豆制肉', '火辣香草'],
+                '911': ['特选苹果', '豆制肉', '火辣香草'],
+                '912': ['萌绿大豆', '粗枝大葱', '纯粹油'],
+                '913': ['萌绿大豆', '粗枝大葱', '纯粹油'],
+                '914': ['萌绿大豆', '粗枝大葱', '纯粹油'],
+                '921': ['放松可可', '哞哞鲜奶', '特选蛋'],
+                '922': ['放松可可', '哞哞鲜奶', '特选蛋'],
+                '923': ['放松可可', '哞哞鲜奶', '特选蛋'],
+                '980': ['放松可可', '醒脑咖啡豆', '窝心洋芋'],
+                '7006': ['萌绿大豆', '萌绿玉米', '窝心洋芋'],
+                '7007': ['萌绿大豆', '萌绿玉米', '窝心洋芋'],
+                '7054': ['放松可可', '醒脑咖啡豆', '窝心洋芋'],
+                '9001': ['特选苹果', '暖暖姜', '特选蛋'],
+                '9002': ['特选苹果', '暖暖姜', '特选蛋'],
+                '9004': ['哞哞鲜奶', '放松可可', '豆制肉']
+            };
+            return pokemonIngredients[pokemonId] || ['哞哞鲜奶', '甜甜蜜', '放松可可'];
+        }
+
+        function getIngredientValue(ingredient) {
+            const ingredientMap = {
+                '哞哞鲜奶': 'milk',
+                '甜甜蜜': 'honey',
+                '放松可可': 'cacao',
+                '特选苹果': 'apple',
+                '品鲜蘑菇': 'mushroom',
+                '火辣香草': 'herb',
+                '特选蛋': 'egg',
+                '窝心洋芋': 'potato',
+                '好眠番茄': 'tomato',
+                '粗枝大葱': 'wheat',
+                '萌绿玉米': 'corn',
+                '萌绿大豆': 'soybean',
+                '醒脑咖啡豆': 'coffee',
+                '美味尾巴': 'tail',
+                '暖暖姜': 'ginger',
+                '纯粹油': 'oil',
+                '豆制肉': 'tofu'
+            };
+            return ingredientMap[ingredient] || 'milk';
+        }
+    </script>
+</body>
+</html> 
