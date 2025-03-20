@@ -105,6 +105,28 @@
             background-color: #2ecc71;
             transition: width 0.3s ease;
         }
+        .image-upload-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 2px dashed #ddd;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .image-preview {
+            max-width: 300px;
+            margin: 10px 0;
+        }
+        .loading {
+            display: none;
+            margin: 10px 0;
+        }
+        .recognition-result {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -866,15 +888,15 @@
                     };
                     return skillNames[skill];
                 }).join('、') : '无'}</p>
-                <div class="rating-bar">
-                    <div class="rating-fill" style="width: ${scorePercentage}%"></div>
-                </div>
                 <p>总分：${totalScore.toFixed(1)}分</p>
                 <p>评价：${evaluation}</p>
                 <p>详细分析：</p>
                 <ul>
                     ${isShiny ? '<li>闪光加成：0.5分</li>' : ''}
                     <li>副技能得分：${subskillScore.toFixed(1)}分</li>
+                    ${pokemonCategory === 'ingredient' ? 
+                        `<li>食材组合得分：${(ingredientType1 === ingredientType2 && ingredientType2 === ingredientType3) ? '0.8分' : '0分'}</li>` : 
+                        ''}
                     <li>性格加成：${(['sassy', 'quiet', 'modest', 'rash'].includes(nature) && pokemonCategory === 'ingredient') ? '1.0分' : 
                                     (nature === 'jolly' && pokemonCategory === 'ingredient') ? '-1.0分' :
                                     (nature === 'bold' && pokemonCategory === 'ingredient') ? '-0.6分' :
@@ -1228,15 +1250,31 @@
                 if (!selectedType || type === selectedType) {
                     // 如果选择了全部属性或匹配当前属性，显示该组
                     optgroup.style.display = '';
+                    // 显示该组下的所有选项
+                    Array.from(optgroup.getElementsByTagName('option')).forEach(option => {
+                        option.style.display = '';
+                    });
                 } else {
                     // 否则隐藏该组
                     optgroup.style.display = 'none';
+                    // 隐藏该组下的所有选项
+                    Array.from(optgroup.getElementsByTagName('option')).forEach(option => {
+                        option.style.display = 'none';
+                    });
                 }
             });
             
-            // 恢复之前选中的值
-            if (currentValue) {
-                pokemonSelect.value = currentValue;
+            // 如果没有选择任何宝可梦，重置选择
+            if (!currentValue) {
+                pokemonSelect.value = '';
+            } else {
+                // 检查当前选中的宝可梦是否在可见选项中
+                const selectedOption = pokemonSelect.options[pokemonSelect.selectedIndex];
+                if (selectedOption && selectedOption.style.display === 'none') {
+                    pokemonSelect.value = '';
+                } else {
+                    pokemonSelect.value = currentValue;
+                }
             }
         }
     </script>
