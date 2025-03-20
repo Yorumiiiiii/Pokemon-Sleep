@@ -113,6 +113,29 @@
         
         <div class="calculator-section">
             <h2>宝可梦基本信息</h2>
+            <label for="pokemonTypeFilter">宝可梦属性筛选:</label>
+            <select id="pokemonTypeFilter" onchange="filterPokemonByType()">
+                <option value="">全部属性</option>
+                <option value="草系">草系</option>
+                <option value="火系">火系</option>
+                <option value="水系">水系</option>
+                <option value="格斗系">格斗系</option>
+                <option value="电系">电系</option>
+                <option value="超能力系">超能力系</option>
+                <option value="一般系">一般系</option>
+                <option value="幽灵系">幽灵系</option>
+                <option value="岩石系">岩石系</option>
+                <option value="钢系">钢系</option>
+                <option value="恶系">恶系</option>
+                <option value="毒系">毒系</option>
+                <option value="地面系">地面系</option>
+                <option value="虫系">虫系</option>
+                <option value="冰系">冰系</option>
+                <option value="飞行系">飞行系</option>
+                <option value="龙系">龙系</option>
+                <option value="妖精系">妖精系</option>
+            </select>
+
             <label for="pokemonName">宝可梦名称:</label>
             <select id="pokemonName" onchange="updatePokemonType()">
                 <option value="">请选择宝可梦</option>
@@ -443,6 +466,7 @@
             </select>
 
             <h3>副技能选择</h3>
+            <p style="color: #666; font-style: italic;">暂时只考虑50级以前的副技能</p>
             
             <!-- 特殊技能 -->
             <div class="subskill-section">
@@ -918,7 +942,7 @@
                     '354': 'ingredient', '359': 'ingredient', '360': 'skill',
                     '363': 'ingredient', '364': 'ingredient', '365': 'ingredient',
                     '403': 'ingredient', '404': 'ingredient', '405': 'ingredient',
-                    '425': 'ingredient', '426': 'ingredient', '438': 'ingredient',
+                    '425': 'skill', '426': 'skill', '438': 'ingredient',
                     '439': 'ingredient', '447': 'skill', '448': 'skill',
                     '453': 'ingredient', '454': 'ingredient', '459': 'ingredient',
                     '460': 'ingredient', '461': 'ingredient', '462': 'skill',
@@ -1186,6 +1210,34 @@
                 '豆制肉': 'tofu'
             };
             return ingredientMap[ingredient] || 'milk';
+        }
+
+        function filterPokemonByType() {
+            const selectedType = document.getElementById('pokemonTypeFilter').value;
+            const pokemonSelect = document.getElementById('pokemonName');
+            
+            // 保存当前选中的值
+            const currentValue = pokemonSelect.value;
+            
+            // 获取所有optgroup
+            const optgroups = Array.from(pokemonSelect.getElementsByTagName('optgroup'));
+            
+            // 遍历所有optgroup
+            optgroups.forEach(optgroup => {
+                const type = optgroup.label;
+                if (!selectedType || type === selectedType) {
+                    // 如果选择了全部属性或匹配当前属性，显示该组
+                    optgroup.style.display = '';
+                } else {
+                    // 否则隐藏该组
+                    optgroup.style.display = 'none';
+                }
+            });
+            
+            // 恢复之前选中的值
+            if (currentValue) {
+                pokemonSelect.value = currentValue;
+            }
         }
     </script>
 </body>
