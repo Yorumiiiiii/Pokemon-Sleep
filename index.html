@@ -1891,60 +1891,49 @@
         function filterPokemonByType() {
             const typeFilter = document.getElementById('pokemonTypeFilter').value;
             const pokemonSelect = document.getElementById('pokemonName');
-            const optgroups = pokemonSelect.getElementsByTagName('optgroup');
+            const options = pokemonSelect.options;
             
-            // 如果没有选择类型，显示所有选项
-            if (!typeFilter) {
-                Array.from(optgroups).forEach(optgroup => {
-                    optgroup.style.display = '';
-                    Array.from(optgroup.getElementsByTagName('option')).forEach(option => {
-                        option.style.display = '';
-                    });
-                });
-                return;
-            }
-            
-            // 隐藏所有选项组
-            Array.from(optgroups).forEach(optgroup => {
-                if (optgroup.label === typeFilter) {
-                    optgroup.style.display = '';
-                    Array.from(optgroup.getElementsByTagName('option')).forEach(option => {
-                        option.style.display = '';
-                    });
-                } else {
-                    optgroup.style.display = 'none';
-                    Array.from(optgroup.getElementsByTagName('option')).forEach(option => {
-                        option.style.display = 'none';
-                    });
-                }
-            });
-
-            // 重置宝可梦选择
+            // 重置选择
             pokemonSelect.value = '';
             
-            // 触发 change 事件以更新其他相关字段
-            const event = new Event('change', {
-                bubbles: true,
-                cancelable: true,
-            });
-            pokemonSelect.dispatchEvent(event);
+            // 遍历所有选项
+            for (let i = 0; i < options.length; i++) {
+                const option = options[i];
+                const parent = option.parentElement;
+                
+                // 如果是 optgroup
+                if (parent.tagName === 'OPTGROUP') {
+                    if (!typeFilter || parent.label === typeFilter) {
+                        option.hidden = false;
+                        parent.hidden = false;
+                    } else {
+                        option.hidden = true;
+                        parent.hidden = true;
+                    }
+                }
+            }
+
+            // 更新宝可梦类型
+            updatePokemonType();
         }
 
         // 页面加载完成后初始化事件监听
-        document.addEventListener('DOMContentLoaded', function() {
-            // 为类型筛选添加事件监听
+        window.addEventListener('load', function() {
+            // 初始化类型筛选
             const typeFilter = document.getElementById('pokemonTypeFilter');
-            typeFilter.addEventListener('change', filterPokemonByType);
+            if (typeFilter) {
+                typeFilter.addEventListener('change', filterPokemonByType);
+            }
             
-            // 为宝可梦选择添加事件监听
+            // 初始化宝可梦选择
             const pokemonSelect = document.getElementById('pokemonName');
-            pokemonSelect.addEventListener('change', function() {
-                updatePokemonType();
-            });
+            if (pokemonSelect) {
+                pokemonSelect.addEventListener('change', updatePokemonType);
+            }
             
             // 初始化复选框事件监听
             const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            checkboxes.forEach(checkbox => {
+            checkboxes.forEach(function(checkbox) {
                 checkbox.addEventListener('change', function(e) {
                     const level = this.id.split('_')[1];
                     const skillName = this.id.split('_')[0];
@@ -1954,7 +1943,7 @@
                         if (selectedSkills[level] && selectedSkills[level] !== skillName) {
                             // 如果已经选择了其他技能，取消当前选择
                             this.checked = false;
-                            alert('每个等级只能选择一个技能！');
+                            window.alert('每个等级只能选择一个技能！');
                             return;
                         }
                         
@@ -1962,7 +1951,7 @@
                         for (let otherLevel in selectedSkills) {
                             if (otherLevel !== level && selectedSkills[otherLevel] === skillName) {
                                 this.checked = false;
-                                alert('不同等级不能选择相同的技能！');
+                                window.alert('不同等级不能选择相同的技能！');
                                 return;
                             }
                         }
@@ -1976,6 +1965,11 @@
                 });
             });
         });
+
+        // 添加移动端 Safari 的触摸事件支持
+        if ('ontouchstart' in window) {
+            document.addEventListener('touchstart', function(){}, false);
+        }
     </script>
 </body>
 </html> 
