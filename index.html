@@ -970,9 +970,9 @@
             const selectedSubskills = [];
             const subskillCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
             subskillCheckboxes.forEach(checkbox => {
-                // 从ID中提取技能名称（移除等级后缀）
-                const skillName = checkbox.id.split('_')[0];
-                selectedSubskills.push(skillName);
+                // 从ID中提取技能名称和等级
+                const [skillName, level] = checkbox.id.split('_');
+                selectedSubskills.push({name: skillName, level: parseInt(level)});
             });
 
             // 基础分数计算
@@ -986,14 +986,14 @@
 
             // 副技能评分
             let subskillScore = 0;
-            const hasIngredientChanceM = selectedSubskills.includes('ingredientChanceM');
+            const hasIngredientChanceM = selectedSubskills.some(skill => skill.name === 'ingredientChanceM');
 
             // 根据宝可梦类型设置不同的副技能评分
             if (pokemonCategory === 'ingredient') {
                 // 食材型宝可梦的副技能评分
-                const hasIngredientM = selectedSubskills.includes('ingredientM');
+                const hasIngredientM = selectedSubskills.some(skill => skill.name === 'ingredientM');
                 selectedSubskills.forEach(skill => {
-                    switch(skill) {
+                    switch(skill.name) {
                         case 'ingredientM':
                             subskillScore += 1.6;
                             break;
@@ -1034,14 +1034,14 @@
                 });
             } else if (pokemonCategory === 'skill') {
                 // 技能型宝可梦的副技能评分
-                const hasSkillChanceM = selectedSubskills.includes('skillTriggerM');
-                const hasBerryS = selectedSubskills.includes('berryS');
+                const hasSkillChanceM = selectedSubskills.some(skill => skill.name === 'skillTriggerM');
+                const hasBerryS = selectedSubskills.some(skill => skill.name === 'berryS');
                 // 特殊宝可梦列表（不额外加分）
                 const specialPokemon = ['845', '453', '454', '980', '7054', '1', '2', '3', '909', '910', '911'];
                 const isSpecialPokemon = specialPokemon.includes(pokemonName);
 
                 selectedSubskills.forEach(skill => {
-                    switch(skill) {
+                    switch(skill.name) {
                         case 'skillTriggerM':
                             subskillScore += 1.6;
                             break;
@@ -1082,9 +1082,9 @@
                 });
             } else {
                 // 树果型宝可梦的副技能评分
-                const hasBerryS = selectedSubskills.includes('berryS');
+                const hasBerryS = selectedSubskills.some(skill => skill.name === 'berryS');
                 selectedSubskills.forEach(skill => {
-                    switch(skill) {
+                    switch(skill.name) {
                         case 'berryS':
                             subskillScore += 1.8;
                             break;
@@ -1195,8 +1195,175 @@
             const totalScore = baseScore; // 移除Math.round，保留小数点
             const maxScore = 100; // 调整最大分数为100
 
+            // 计算前三个技能的分数
+            let firstThreeSkillsScore = 0;
+            if (isShiny) {
+                firstThreeSkillsScore += 0.5;
+            }
+            
+            // 只计算前三个技能的得分
+            const firstThreeSkills = selectedSubskills.filter(skill => skill.level <= 50);
+            
+            // 根据宝可梦类型设置不同的副技能评分
+            if (pokemonCategory === 'ingredient') {
+                const hasIngredientM = firstThreeSkills.some(skill => skill.name === 'ingredientM');
+                firstThreeSkills.forEach(skill => {
+                    switch(skill.name) {
+                        case 'ingredientM':
+                            firstThreeSkillsScore += 1.6;
+                            break;
+                        case 'ingredientS':
+                            firstThreeSkillsScore += 0.7;
+                            break;
+                        case 'helpSpeedM':
+                            firstThreeSkillsScore += 0.9;
+                            break;
+                        case 'helpSpeedS':
+                            firstThreeSkillsScore += 0.4;
+                            break;
+                        case 'berryS':
+                            firstThreeSkillsScore += 0.2;
+                            break;
+                        case 'sleepExpBonus':
+                            firstThreeSkillsScore += 0.3;
+                            break;
+                        case 'helperBonus':
+                            firstThreeSkillsScore += hasIngredientM ? 1.3 : 0.3;
+                            break;
+                        case 'inventoryS':
+                            firstThreeSkillsScore += hasIngredientM ? 0.2 : 0.1;
+                            break;
+                        case 'inventoryM':
+                            firstThreeSkillsScore += hasIngredientM ? 0.4 : 0.2;
+                            break;
+                        case 'inventoryL':
+                            firstThreeSkillsScore += hasIngredientM ? 0.6 : 0.3;
+                            break;
+                        case 'skillLevelM':
+                            firstThreeSkillsScore += 0.4;
+                            break;
+                        case 'skillLevelS':
+                            firstThreeSkillsScore += 0.2;
+                            break;
+                    }
+                });
+            } else if (pokemonCategory === 'skill') {
+                const hasSkillChanceM = firstThreeSkills.some(skill => skill.name === 'skillTriggerM');
+                const hasBerryS = firstThreeSkills.some(skill => skill.name === 'berryS');
+                const specialPokemon = ['845', '453', '454', '980', '7054', '1', '2', '3', '909', '910', '911'];
+                const isSpecialPokemon = specialPokemon.includes(pokemonName);
+
+                firstThreeSkills.forEach(skill => {
+                    switch(skill.name) {
+                        case 'skillTriggerM':
+                            firstThreeSkillsScore += 1.6;
+                            break;
+                        case 'skillTriggerS':
+                            firstThreeSkillsScore += 0.7;
+                            break;
+                        case 'helpSpeedM':
+                            firstThreeSkillsScore += 0.9;
+                            break;
+                        case 'helpSpeedS':
+                            firstThreeSkillsScore += 0.4;
+                            break;
+                        case 'inventoryL':
+                            firstThreeSkillsScore += 0.1;
+                            break;
+                        case 'inventoryM':
+                            firstThreeSkillsScore += 0.1;
+                            break;
+                        case 'inventoryS':
+                            firstThreeSkillsScore += 0.1;
+                            break;
+                        case 'skillLevelM':
+                            firstThreeSkillsScore += 0.4;
+                            break;
+                        case 'skillLevelS':
+                            firstThreeSkillsScore += 0.2;
+                            break;
+                        case 'sleepExpBonus':
+                            firstThreeSkillsScore += 0.3;
+                            break;
+                        case 'helperBonus':
+                            firstThreeSkillsScore += hasSkillChanceM ? 1.3 : 0.3;
+                            break;
+                        case 'berryS':
+                            firstThreeSkillsScore += isSpecialPokemon ? 0.56 : 0.2;
+                            break;
+                    }
+                });
+            } else {
+                const hasBerryS = firstThreeSkills.some(skill => skill.name === 'berryS');
+                firstThreeSkills.forEach(skill => {
+                    switch(skill.name) {
+                        case 'berryS':
+                            firstThreeSkillsScore += 1.8;
+                            break;
+                        case 'helpSpeedM':
+                            firstThreeSkillsScore += 1.2;
+                            break;
+                        case 'helpSpeedS':
+                            firstThreeSkillsScore += 0.6;
+                            break;
+                        case 'sleepExp':
+                            firstThreeSkillsScore += 0.3;
+                            break;
+                        case 'helperBonus':
+                            firstThreeSkillsScore += hasBerryS ? 1.3 : 0.5;
+                            break;
+                    }
+                });
+
+                if (!hasBerryS) {
+                    firstThreeSkillsScore -= 2.5;
+                }
+            }
+
+            // 添加性格加成到前三个技能的分数
+            if (pokemonCategory === 'ingredient') {
+                if (['sassy', 'quiet', 'rash'].includes(nature)) {
+                    firstThreeSkillsScore += 1.0;
+                } else if (nature === 'modest') {
+                    firstThreeSkillsScore += 0.5;
+                } else if (['jolly', 'naughty', 'rash', 'careful'].includes(nature)) {
+                    firstThreeSkillsScore -= 1.0;
+                } else if (['bold', 'timid', 'calm'].includes(nature)) {
+                    firstThreeSkillsScore -= 0.6;
+                } else if (nature === 'modest') {
+                    firstThreeSkillsScore -= 0.4;
+                }
+            } else if (pokemonCategory === 'skill') {
+                if (['gentle', 'modest', 'calm', 'careful'].includes(nature)) {
+                    if (nature === 'calm') {
+                        firstThreeSkillsScore += 0.5;
+                    } else {
+                        firstThreeSkillsScore += 1.0;
+                    }
+                } else if (['lonely', 'brave', 'adamant'].includes(nature)) {
+                    firstThreeSkillsScore += 0.6;
+                } else if (['rash', 'naive', 'jolly'].includes(nature)) {
+                    firstThreeSkillsScore -= 1.0;
+                } else if (['bold', 'timid', 'modest'].includes(nature)) {
+                    firstThreeSkillsScore -= 0.6;
+                } else if (nature === 'naughty') {
+                    firstThreeSkillsScore -= 0.4;
+                }
+            } else {
+                if (nature === 'adamant') {
+                    firstThreeSkillsScore += 1.2;
+                } else if (['lonely', 'brave', 'naughty'].includes(nature)) {
+                    firstThreeSkillsScore += 0.9;
+                } else if (['rash', 'naive', 'jolly'].includes(nature)) {
+                    firstThreeSkillsScore += 0.3;
+                } else if (['modest', 'calm', 'bold'].includes(nature)) {
+                    firstThreeSkillsScore -= 0.9;
+                }
+            }
+
             // 计算百分比
             const scorePercentage = Math.min((totalScore / maxScore) * 100, 100);
+            const firstThreeSkillsPercentage = Math.min((firstThreeSkillsScore / maxScore) * 100, 100);
 
             // 评价等级
             let evaluation = '';
@@ -1243,9 +1410,10 @@
                         'skillTriggerM': '技能机率提升M',
                         'skillTriggerS': '技能机率提升S'
                     };
-                    return skillNames[skill] || skill;
+                    return skillNames[skill.name] || skill.name;
                 }).join('、') : '无'}</p>
-                <p>总分：${totalScore.toFixed(2)}分</p>
+                <h4>前三个技能评分：${firstThreeSkillsScore.toFixed(2)}分</h4>
+                <h4>全部技能评分：${totalScore.toFixed(2)}分</h4>
                 <p>评价：${evaluation}</p>
                 <p>详细分析：</p>
                 <ul>
