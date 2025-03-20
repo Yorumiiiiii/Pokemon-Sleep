@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokemon Sleep 宝可梦评分系统</title>
+    <title>Pokemon Sleep 宝可梦评分系统（测试版）</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -40,38 +40,79 @@
             border: 1px solid #ddd;
             border-radius: 4px;
         }
+        .subskill-section {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+        }
+        .subskill-section-title {
+            font-weight: bold;
+            margin: 0 0 15px 0;
+            color: #2c3e50;
+            font-size: 1.1em;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e9ecef;
+        }
         .subskill-group {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 10px;
+            gap: 12px;
             margin: 10px 0;
         }
         .subskill-item {
             display: flex;
             align-items: center;
-            gap: 5px;
-            padding: 5px;
-            border-radius: 4px;
+            gap: 8px;
+            padding: 10px;
+            border-radius: 6px;
+            background-color: white;
+            border: 1px solid #e9ecef;
+            transition: all 0.2s ease;
+        }
+        .subskill-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-color: #3498db;
         }
         .subskill-gold {
             background-color: #fff3cd;
             border: 1px solid #ffeeba;
         }
+        .subskill-gold label {
+            color: #856404;
+            font-weight: 500;
+        }
         .subskill-blue {
             background-color: #cce5ff;
             border: 1px solid #b8daff;
+        }
+        .subskill-blue label {
+            color: #004085;
+            font-weight: 500;
         }
         .subskill-white {
             background-color: #f8f9fa;
             border: 1px solid #e9ecef;
         }
-        .subskill-section {
-            margin: 15px 0;
+        .subskill-white label {
+            color: #495057;
         }
-        .subskill-section-title {
-            font-weight: bold;
-            margin: 10px 0;
-            color: #2c3e50;
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #3498db;
+        }
+        input[type="checkbox"]:checked + label {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+        .subskill-item label {
+            margin: 0;
+            font-size: 0.95em;
+            cursor: pointer;
         }
         button {
             background-color: #3498db;
@@ -488,118 +529,383 @@
             </select>
 
             <h3>副技能选择</h3>
-            <p style="color: #666; font-style: italic;">暂时只考虑50级以前的副技能</p>
+            <p style="color: #666; font-style: italic;">请选择对应等级的副技能</p>
             
-            <!-- 特殊技能 -->
+            <!-- 10级技能 -->
             <div class="subskill-section">
-                <div class="subskill-section-title">特殊</div>
+                <h3 class="subskill-section-title">10级技能</h3>
                 <div class="subskill-group">
                     <div class="subskill-item subskill-gold">
-                        <input type="checkbox" id="berryS" value="berryS">
-                        <label for="berryS">树果数量S</label>
+                        <input type="checkbox" id="berryS_10" value="树果数量S">
+                        <label for="berryS_10">树果数量S</label>
                     </div>
                     <div class="subskill-item subskill-gold">
-                        <input type="checkbox" id="sleepExp" value="sleepExp">
-                        <label for="sleepExp">睡眠EXP奖励</label>
+                        <input type="checkbox" id="sleepExpBonus_10" value="睡眠EXP奖励">
+                        <label for="sleepExpBonus_10">睡眠EXP奖励</label>
                     </div>
                     <div class="subskill-item subskill-gold">
-                        <input type="checkbox" id="helperBonus" value="helperBonus">
-                        <label for="helperBonus">帮手奖励</label>
+                        <input type="checkbox" id="helperBonus_10" value="帮手奖励">
+                        <label for="helperBonus_10">帮手奖励</label>
                     </div>
                     <div class="subskill-item subskill-gold">
-                        <input type="checkbox" id="researchExp" value="researchExp">
-                        <label for="researchExp">研究EXP奖励</label>
+                        <input type="checkbox" id="researchExpBonus_10" value="研究EXP奖励">
+                        <label for="researchExpBonus_10">研究EXP奖励</label>
                     </div>
                     <div class="subskill-item subskill-gold">
-                        <input type="checkbox" id="dreamShard" value="dreamShard">
-                        <label for="dreamShard">梦之碎片奖励</label>
+                        <input type="checkbox" id="dreamShardBonus_10" value="梦之碎片奖励">
+                        <label for="dreamShardBonus_10">梦之碎片奖励</label>
                     </div>
                     <div class="subskill-item subskill-gold">
-                        <input type="checkbox" id="energyRecovery" value="energyRecovery">
-                        <label for="energyRecovery">活力回复奖励</label>
+                        <input type="checkbox" id="energyRecoveryBonus_10" value="活力回复奖励">
+                        <label for="energyRecoveryBonus_10">活力回复奖励</label>
                     </div>
-                </div>
-            </div>
-
-            <!-- 帮速技能 -->
-            <div class="subskill-section">
-                <div class="subskill-section-title">帮速</div>
-                <div class="subskill-group">
                     <div class="subskill-item subskill-white">
-                        <input type="checkbox" id="helpSpeedS" value="helpSpeedS">
-                        <label for="helpSpeedS">帮忙速度S</label>
+                        <input type="checkbox" id="helpSpeedS_10" value="帮忙速度S">
+                        <label for="helpSpeedS_10">帮忙速度S</label>
                     </div>
                     <div class="subskill-item subskill-blue">
-                        <input type="checkbox" id="helpSpeedM" value="helpSpeedM">
-                        <label for="helpSpeedM">帮忙速度M</label>
+                        <input type="checkbox" id="helpSpeedM_10" value="帮忙速度M">
+                        <label for="helpSpeedM_10">帮忙速度M</label>
                     </div>
-                </div>
-            </div>
-
-            <!-- 持有上限提升技能 -->
-            <div class="subskill-section">
-                <div class="subskill-section-title">持有上限提升</div>
-                <div class="subskill-group">
                     <div class="subskill-item subskill-white">
-                        <input type="checkbox" id="inventoryUpS" value="inventoryUpS">
-                        <label for="inventoryUpS">持有上限提升S</label>
+                        <input type="checkbox" id="inventoryS_10" value="持有上限提升S">
+                        <label for="inventoryS_10">持有上限提升S</label>
                     </div>
                     <div class="subskill-item subskill-blue">
-                        <input type="checkbox" id="inventoryUpM" value="inventoryUpM">
-                        <label for="inventoryUpM">持有上限提升M</label>
+                        <input type="checkbox" id="inventoryM_10" value="持有上限提升M">
+                        <label for="inventoryM_10">持有上限提升M</label>
                     </div>
                     <div class="subskill-item subskill-blue">
-                        <input type="checkbox" id="inventoryUpL" value="inventoryUpL">
-                        <label for="inventoryUpL">持有上限提升L</label>
+                        <input type="checkbox" id="inventoryL_10" value="持有上限提升L">
+                        <label for="inventoryL_10">持有上限提升L</label>
                     </div>
-                </div>
-            </div>
-
-            <!-- 技能等级技能 -->
-            <div class="subskill-section">
-                <div class="subskill-section-title">技能等级</div>
-                <div class="subskill-group">
                     <div class="subskill-item subskill-blue">
-                        <input type="checkbox" id="skillLevelUpS" value="skillLevelUpS">
-                        <label for="skillLevelUpS">技能等级提升S</label>
+                        <input type="checkbox" id="skillLevelS_10" value="技能等级提升S">
+                        <label for="skillLevelS_10">技能等级提升S</label>
                     </div>
                     <div class="subskill-item subskill-gold">
-                        <input type="checkbox" id="skillLevelUpM" value="skillLevelUpM">
-                        <label for="skillLevelUpM">技能等级提升M</label>
+                        <input type="checkbox" id="skillLevelM_10" value="技能等级提升M">
+                        <label for="skillLevelM_10">技能等级提升M</label>
+                    </div>
+                    <div class="subskill-item subskill-white">
+                        <input type="checkbox" id="ingredientS_10" value="食材机率提升S">
+                        <label for="ingredientS_10">食材机率提升S</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="ingredientM_10" value="食材机率提升M">
+                        <label for="ingredientM_10">食材机率提升M</label>
+                    </div>
+                    <div class="subskill-item subskill-white">
+                        <input type="checkbox" id="skillTriggerS_10" value="技能机率提升S">
+                        <label for="skillTriggerS_10">技能机率提升S</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="skillTriggerM_10" value="技能机率提升M">
+                        <label for="skillTriggerM_10">技能机率提升M</label>
                     </div>
                 </div>
             </div>
 
-            <!-- 食材机率技能 -->
+            <!-- 25级技能 -->
             <div class="subskill-section">
-                <div class="subskill-section-title">食材机率</div>
+                <h3 class="subskill-section-title">25级技能</h3>
                 <div class="subskill-group">
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="berryS_25" value="树果数量S">
+                        <label for="berryS_25">树果数量S</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="sleepExpBonus_25" value="睡眠EXP奖励">
+                        <label for="sleepExpBonus_25">睡眠EXP奖励</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="helperBonus_25" value="帮手奖励">
+                        <label for="helperBonus_25">帮手奖励</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="researchExpBonus_25" value="研究EXP奖励">
+                        <label for="researchExpBonus_25">研究EXP奖励</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="dreamShardBonus_25" value="梦之碎片奖励">
+                        <label for="dreamShardBonus_25">梦之碎片奖励</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="energyRecoveryBonus_25" value="活力回复奖励">
+                        <label for="energyRecoveryBonus_25">活力回复奖励</label>
+                    </div>
                     <div class="subskill-item subskill-white">
-                        <input type="checkbox" id="ingredientChanceS" value="ingredientChanceS">
-                        <label for="ingredientChanceS">食材机率提升S</label>
+                        <input type="checkbox" id="helpSpeedS_25" value="帮忙速度S">
+                        <label for="helpSpeedS_25">帮忙速度S</label>
                     </div>
                     <div class="subskill-item subskill-blue">
-                        <input type="checkbox" id="ingredientChanceM" value="ingredientChanceM">
-                        <label for="ingredientChanceM">食材机率提升M</label>
+                        <input type="checkbox" id="helpSpeedM_25" value="帮忙速度M">
+                        <label for="helpSpeedM_25">帮忙速度M</label>
+                    </div>
+                    <div class="subskill-item subskill-white">
+                        <input type="checkbox" id="inventoryS_25" value="持有上限提升S">
+                        <label for="inventoryS_25">持有上限提升S</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="inventoryM_25" value="持有上限提升M">
+                        <label for="inventoryM_25">持有上限提升M</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="inventoryL_25" value="持有上限提升L">
+                        <label for="inventoryL_25">持有上限提升L</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="skillLevelS_25" value="技能等级提升S">
+                        <label for="skillLevelS_25">技能等级提升S</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="skillLevelM_25" value="技能等级提升M">
+                        <label for="skillLevelM_25">技能等级提升M</label>
+                    </div>
+                    <div class="subskill-item subskill-white">
+                        <input type="checkbox" id="ingredientS_25" value="食材机率提升S">
+                        <label for="ingredientS_25">食材机率提升S</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="ingredientM_25" value="食材机率提升M">
+                        <label for="ingredientM_25">食材机率提升M</label>
+                    </div>
+                    <div class="subskill-item subskill-white">
+                        <input type="checkbox" id="skillTriggerS_25" value="技能机率提升S">
+                        <label for="skillTriggerS_25">技能机率提升S</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="skillTriggerM_25" value="技能机率提升M">
+                        <label for="skillTriggerM_25">技能机率提升M</label>
                     </div>
                 </div>
             </div>
 
-            <!-- 技能机率技能 -->
+            <!-- 50级技能 -->
             <div class="subskill-section">
-                <div class="subskill-section-title">技能机率</div>
+                <h3 class="subskill-section-title">50级技能</h3>
                 <div class="subskill-group">
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="berryS_50" value="树果数量S">
+                        <label for="berryS_50">树果数量S</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="sleepExpBonus_50" value="睡眠EXP奖励">
+                        <label for="sleepExpBonus_50">睡眠EXP奖励</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="helperBonus_50" value="帮手奖励">
+                        <label for="helperBonus_50">帮手奖励</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="researchExpBonus_50" value="研究EXP奖励">
+                        <label for="researchExpBonus_50">研究EXP奖励</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="dreamShardBonus_50" value="梦之碎片奖励">
+                        <label for="dreamShardBonus_50">梦之碎片奖励</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="energyRecoveryBonus_50" value="活力回复奖励">
+                        <label for="energyRecoveryBonus_50">活力回复奖励</label>
+                    </div>
                     <div class="subskill-item subskill-white">
-                        <input type="checkbox" id="skillChanceS" value="skillChanceS">
-                        <label for="skillChanceS">技能机率提升S</label>
+                        <input type="checkbox" id="helpSpeedS_50" value="帮忙速度S">
+                        <label for="helpSpeedS_50">帮忙速度S</label>
                     </div>
                     <div class="subskill-item subskill-blue">
-                        <input type="checkbox" id="skillChanceM" value="skillChanceM">
-                        <label for="skillChanceM">技能机率提升M</label>
+                        <input type="checkbox" id="helpSpeedM_50" value="帮忙速度M">
+                        <label for="helpSpeedM_50">帮忙速度M</label>
+                    </div>
+                    <div class="subskill-item subskill-white">
+                        <input type="checkbox" id="inventoryS_50" value="持有上限提升S">
+                        <label for="inventoryS_50">持有上限提升S</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="inventoryM_50" value="持有上限提升M">
+                        <label for="inventoryM_50">持有上限提升M</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="inventoryL_50" value="持有上限提升L">
+                        <label for="inventoryL_50">持有上限提升L</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="skillLevelS_50" value="技能等级提升S">
+                        <label for="skillLevelS_50">技能等级提升S</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="skillLevelM_50" value="技能等级提升M">
+                        <label for="skillLevelM_50">技能等级提升M</label>
+                    </div>
+                    <div class="subskill-item subskill-white">
+                        <input type="checkbox" id="ingredientS_50" value="食材机率提升S">
+                        <label for="ingredientS_50">食材机率提升S</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="ingredientM_50" value="食材机率提升M">
+                        <label for="ingredientM_50">食材机率提升M</label>
+                    </div>
+                    <div class="subskill-item subskill-white">
+                        <input type="checkbox" id="skillTriggerS_50" value="技能机率提升S">
+                        <label for="skillTriggerS_50">技能机率提升S</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="skillTriggerM_50" value="技能机率提升M">
+                        <label for="skillTriggerM_50">技能机率提升M</label>
                     </div>
                 </div>
             </div>
-            
+
+            <!-- 75级技能 -->
+            <div class="subskill-section">
+                <h3 class="subskill-section-title">75级技能</h3>
+                <div class="subskill-group">
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="berryS_75" value="树果数量S">
+                        <label for="berryS_75">树果数量S</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="sleepExpBonus_75" value="睡眠EXP奖励">
+                        <label for="sleepExpBonus_75">睡眠EXP奖励</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="helperBonus_75" value="帮手奖励">
+                        <label for="helperBonus_75">帮手奖励</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="researchExpBonus_75" value="研究EXP奖励">
+                        <label for="researchExpBonus_75">研究EXP奖励</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="dreamShardBonus_75" value="梦之碎片奖励">
+                        <label for="dreamShardBonus_75">梦之碎片奖励</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="energyRecoveryBonus_75" value="活力回复奖励">
+                        <label for="energyRecoveryBonus_75">活力回复奖励</label>
+                    </div>
+                    <div class="subskill-item subskill-white">
+                        <input type="checkbox" id="helpSpeedS_75" value="帮忙速度S">
+                        <label for="helpSpeedS_75">帮忙速度S</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="helpSpeedM_75" value="帮忙速度M">
+                        <label for="helpSpeedM_75">帮忙速度M</label>
+                    </div>
+                    <div class="subskill-item subskill-white">
+                        <input type="checkbox" id="inventoryS_75" value="持有上限提升S">
+                        <label for="inventoryS_75">持有上限提升S</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="inventoryM_75" value="持有上限提升M">
+                        <label for="inventoryM_75">持有上限提升M</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="inventoryL_75" value="持有上限提升L">
+                        <label for="inventoryL_75">持有上限提升L</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="skillLevelS_75" value="技能等级提升S">
+                        <label for="skillLevelS_75">技能等级提升S</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="skillLevelM_75" value="技能等级提升M">
+                        <label for="skillLevelM_75">技能等级提升M</label>
+                    </div>
+                    <div class="subskill-item subskill-white">
+                        <input type="checkbox" id="ingredientS_75" value="食材机率提升S">
+                        <label for="ingredientS_75">食材机率提升S</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="ingredientM_75" value="食材机率提升M">
+                        <label for="ingredientM_75">食材机率提升M</label>
+                    </div>
+                    <div class="subskill-item subskill-white">
+                        <input type="checkbox" id="skillTriggerS_75" value="技能机率提升S">
+                        <label for="skillTriggerS_75">技能机率提升S</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="skillTriggerM_75" value="技能机率提升M">
+                        <label for="skillTriggerM_75">技能机率提升M</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 100级技能 -->
+            <div class="subskill-section">
+                <h3 class="subskill-section-title">100级技能</h3>
+                <div class="subskill-group">
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="berryS_100" value="树果数量S">
+                        <label for="berryS_100">树果数量S</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="sleepExpBonus_100" value="睡眠EXP奖励">
+                        <label for="sleepExpBonus_100">睡眠EXP奖励</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="helperBonus_100" value="帮手奖励">
+                        <label for="helperBonus_100">帮手奖励</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="researchExpBonus_100" value="研究EXP奖励">
+                        <label for="researchExpBonus_100">研究EXP奖励</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="dreamShardBonus_100" value="梦之碎片奖励">
+                        <label for="dreamShardBonus_100">梦之碎片奖励</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="energyRecoveryBonus_100" value="活力回复奖励">
+                        <label for="energyRecoveryBonus_100">活力回复奖励</label>
+                    </div>
+                    <div class="subskill-item subskill-white">
+                        <input type="checkbox" id="helpSpeedS_100" value="帮忙速度S">
+                        <label for="helpSpeedS_100">帮忙速度S</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="helpSpeedM_100" value="帮忙速度M">
+                        <label for="helpSpeedM_100">帮忙速度M</label>
+                    </div>
+                    <div class="subskill-item subskill-white">
+                        <input type="checkbox" id="inventoryS_100" value="持有上限提升S">
+                        <label for="inventoryS_100">持有上限提升S</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="inventoryM_100" value="持有上限提升M">
+                        <label for="inventoryM_100">持有上限提升M</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="inventoryL_100" value="持有上限提升L">
+                        <label for="inventoryL_100">持有上限提升L</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="skillLevelS_100" value="技能等级提升S">
+                        <label for="skillLevelS_100">技能等级提升S</label>
+                    </div>
+                    <div class="subskill-item subskill-gold">
+                        <input type="checkbox" id="skillLevelM_100" value="技能等级提升M">
+                        <label for="skillLevelM_100">技能等级提升M</label>
+                    </div>
+                    <div class="subskill-item subskill-white">
+                        <input type="checkbox" id="ingredientS_100" value="食材机率提升S">
+                        <label for="ingredientS_100">食材机率提升S</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="ingredientM_100" value="食材机率提升M">
+                        <label for="ingredientM_100">食材机率提升M</label>
+                    </div>
+                    <div class="subskill-item subskill-white">
+                        <input type="checkbox" id="skillTriggerS_100" value="技能机率提升S">
+                        <label for="skillTriggerS_100">技能机率提升S</label>
+                    </div>
+                    <div class="subskill-item subskill-blue">
+                        <input type="checkbox" id="skillTriggerM_100" value="技能机率提升M">
+                        <label for="skillTriggerM_100">技能机率提升M</label>
+                    </div>
+                </div>
+            </div>
+
             <button onclick="calculatePokemonScore()">计算宝可梦评分</button>
             
             <div id="pokemonScoreResult" class="result"></div>
@@ -607,6 +913,51 @@
     </div>
 
     <script>
+        // 添加全局变量来跟踪已选择的技能
+        let selectedSkills = {
+            '10': null,
+            '25': null,
+            '50': null,
+            '75': null,
+            '100': null
+        };
+
+        // 添加事件监听器到所有复选框
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function(e) {
+                    const level = this.id.split('_')[1];
+                    const skillName = this.id.split('_')[0];
+                    
+                    if (this.checked) {
+                        // 检查是否已经在该等级选择了其他技能
+                        if (selectedSkills[level] && selectedSkills[level] !== skillName) {
+                            // 如果已经选择了其他技能，取消当前选择
+                            this.checked = false;
+                            alert('每个等级只能选择一个技能！');
+                            return;
+                        }
+                        
+                        // 检查其他等级是否已经选择了相同的技能
+                        for (let otherLevel in selectedSkills) {
+                            if (otherLevel !== level && selectedSkills[otherLevel] === skillName) {
+                                this.checked = false;
+                                alert('不同等级不能选择相同的技能！');
+                                return;
+                            }
+                        }
+                        
+                        // 如果检查通过，更新选中的技能
+                        selectedSkills[level] = skillName;
+                    } else {
+                        // 如果取消选中，清除该等级的技能记录
+                        selectedSkills[level] = null;
+                    }
+                });
+            });
+        });
+
         function calculatePokemonScore() {
             const pokemonName = document.getElementById('pokemonName').value;
             const pokemonCategory = document.getElementById('pokemonCategory').value;
@@ -619,7 +970,9 @@
             const selectedSubskills = [];
             const subskillCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
             subskillCheckboxes.forEach(checkbox => {
-                selectedSubskills.push(checkbox.value);
+                // 从ID中提取技能名称（移除等级后缀）
+                const skillName = checkbox.id.split('_')[0];
+                selectedSubskills.push(skillName);
             });
 
             // 基础分数计算
@@ -638,12 +991,13 @@
             // 根据宝可梦类型设置不同的副技能评分
             if (pokemonCategory === 'ingredient') {
                 // 食材型宝可梦的副技能评分
+                const hasIngredientM = selectedSubskills.includes('ingredientM');
                 selectedSubskills.forEach(skill => {
                     switch(skill) {
-                        case 'ingredientChanceM':
+                        case 'ingredientM':
                             subskillScore += 1.6;
                             break;
-                        case 'ingredientChanceS':
+                        case 'ingredientS':
                             subskillScore += 0.7;
                             break;
                         case 'helpSpeedM':
@@ -655,36 +1009,43 @@
                         case 'berryS':
                             subskillScore += 0.2;
                             break;
-                        case 'sleepExp':
+                        case 'sleepExpBonus':
                             subskillScore += 0.3;
                             break;
                         case 'helperBonus':
-                            subskillScore += hasIngredientChanceM ? 1.3 : 0.3;
+                            subskillScore += hasIngredientM ? 1.3 : 0.3;
                             break;
-                        case 'inventoryUpS':
-                            subskillScore += hasIngredientChanceM ? 0.2 : 0.1;
+                        case 'inventoryS':
+                            subskillScore += hasIngredientM ? 0.2 : 0.1;
                             break;
-                        case 'inventoryUpM':
-                            subskillScore += hasIngredientChanceM ? 0.4 : 0.2;
+                        case 'inventoryM':
+                            subskillScore += hasIngredientM ? 0.4 : 0.2;
                             break;
-                        case 'inventoryUpL':
-                            subskillScore += hasIngredientChanceM ? 0.6 : 0.3;
+                        case 'inventoryL':
+                            subskillScore += hasIngredientM ? 0.6 : 0.3;
+                            break;
+                        case 'skillLevelM':
+                            subskillScore += 0.4;
+                            break;
+                        case 'skillLevelS':
+                            subskillScore += 0.2;
                             break;
                     }
                 });
             } else if (pokemonCategory === 'skill') {
                 // 技能型宝可梦的副技能评分
-                const hasSkillChanceM = selectedSubskills.includes('skillChanceM');
+                const hasSkillChanceM = selectedSubskills.includes('skillTriggerM');
                 const hasBerryS = selectedSubskills.includes('berryS');
-                const specialBerryPokemon = ['179', '180', '181', '196', '185', '438', '54', '55', '627', '628', '778', '475', '58', '59', '135', '244', '245', '243'];
-                const isSpecialBerryPokemon = specialBerryPokemon.includes(pokemonName);
+                // 特殊宝可梦列表（不额外加分）
+                const specialPokemon = ['845', '453', '454', '980', '7054', '1', '2', '3', '909', '910', '911'];
+                const isSpecialPokemon = specialPokemon.includes(pokemonName);
 
                 selectedSubskills.forEach(skill => {
                     switch(skill) {
-                        case 'skillChanceM':
+                        case 'skillTriggerM':
                             subskillScore += 1.6;
                             break;
-                        case 'skillChanceS':
+                        case 'skillTriggerS':
                             subskillScore += 0.7;
                             break;
                         case 'helpSpeedM':
@@ -693,29 +1054,29 @@
                         case 'helpSpeedS':
                             subskillScore += 0.4;
                             break;
-                        case 'inventoryUpL':
+                        case 'inventoryL':
                             subskillScore += 0.1;
                             break;
-                        case 'inventoryUpM':
+                        case 'inventoryM':
                             subskillScore += 0.1;
                             break;
-                        case 'inventoryUpS':
+                        case 'inventoryS':
                             subskillScore += 0.1;
                             break;
-                        case 'skillLevelUpM':
+                        case 'skillLevelM':
                             subskillScore += 0.4;
                             break;
-                        case 'skillLevelUpS':
+                        case 'skillLevelS':
                             subskillScore += 0.2;
                             break;
-                        case 'sleepExp':
+                        case 'sleepExpBonus':
                             subskillScore += 0.3;
                             break;
                         case 'helperBonus':
                             subskillScore += hasSkillChanceM ? 1.3 : 0.3;
                             break;
                         case 'berryS':
-                            subskillScore += isSpecialBerryPokemon ? 0.56 : 0.2;
+                            subskillScore += isSpecialPokemon ? 0.56 : 0.2;
                             break;
                     }
                 });
@@ -734,19 +1095,10 @@
                             subskillScore += 0.6;
                             break;
                         case 'sleepExp':
-                            subskillScore += 0.5;
+                            subskillScore += 0.3;
                             break;
                         case 'helperBonus':
                             subskillScore += hasBerryS ? 1.3 : 0.5;
-                            break;
-                        case 'inventoryUpS':
-                            subskillScore += hasIngredientChanceM ? 0.2 : 0.1;
-                            break;
-                        case 'inventoryUpM':
-                            subskillScore += hasIngredientChanceM ? 0.4 : 0.2;
-                            break;
-                        case 'inventoryUpL':
-                            subskillScore += hasIngredientChanceM ? 0.6 : 0.3;
                             break;
                     }
                 });
@@ -797,19 +1149,16 @@
             // 根据宝可梦类型添加性格加分
             if (pokemonCategory === 'ingredient') {
                 // 食材型宝可梦的性格加分
-                if (['sassy', 'quiet', 'modest', 'rash'].includes(nature)) {
+                if (['sassy', 'quiet', 'rash'].includes(nature)) {
                     baseScore += 1.0;
-                } else if (nature === 'jolly') {
+                } else if (nature === 'modest') {
+                    baseScore += 0.5;
+                } else if (['jolly', 'naughty', 'rash', 'careful'].includes(nature)) {
                     baseScore -= 1.0;
-                } else if (nature === 'bold') {
+                } else if (['bold', 'timid', 'calm'].includes(nature)) {
                     baseScore -= 0.6;
-                } else if (nature === 'adamant') {
+                } else if (nature === 'modest') {
                     baseScore -= 0.4;
-                }
-
-                // 检查三个食材类型是否相同
-                if (ingredientType1 === ingredientType2 && ingredientType2 === ingredientType3) {
-                    baseScore += 0.8;
                 }
             } else if (pokemonCategory === 'skill') {
                 // 技能型宝可梦的性格加分
@@ -821,18 +1170,25 @@
                     }
                 } else if (['lonely', 'brave', 'naughty', 'adamant'].includes(nature)) {
                     baseScore += 0.6;
-                } else if (nature === 'naive') {
+                } else if (['rash', 'naive', 'jolly'].includes(nature)) {
                     baseScore -= 1.0;
-                } else if (nature === 'bold') {
+                } else if (['bold', 'timid', 'modest'].includes(nature)) {
                     baseScore -= 0.6;
                 } else if (nature === 'naughty') {
                     baseScore -= 0.4;
                 }
             } else {
                 // 树果型宝可梦的性格加分
-                if (['lonely', 'brave', 'naughty', 'adamant'].includes(nature)) {
-                    baseScore += 1.0;
+                if (nature === 'adamant') {
+                    baseScore += 1.2;
+                } else if (['lonely', 'brave', 'naughty'].includes(nature)) {
+                    baseScore += 0.9;
+                } else if (['rash', 'naive', 'jolly'].includes(nature)) {
+                    baseScore += 0.3;
+                } else if (['modest', 'calm', 'bold'].includes(nature)) {
+                    baseScore -= 0.9;
                 }
+                // 其他性格（包括害羞）不加分也不扣分
             }
 
             // 计算总分
@@ -871,45 +1227,63 @@
                     const skillNames = {
                         'berryS': '树果数量S',
                         'helperBonus': '帮手奖励',
-                        'sleepExp': '睡眠exp奖励',
-                        'researchExp': '研究exp奖励',
-                        'dreamShard': '梦之碎片奖励',
-                        'energyRecovery': '活力回复奖励',
+                        'sleepExpBonus': '睡眠EXP奖励',
+                        'researchExpBonus': '研究EXP奖励',
+                        'dreamShardBonus': '梦之碎片奖励',
+                        'energyRecoveryBonus': '活力回复奖励',
                         'helpSpeedM': '帮忙速度M',
-                        'inventoryUpM': '持有上限提升M',
-                        'inventoryUpL': '持有上限提升L',
-                        'skillLevelUpM': '技能等级提升M',
-                        'ingredientChanceM': '食材机率提升M',
-                        'skillChanceM': '技能机率提升M',
                         'helpSpeedS': '帮忙速度S',
-                        'inventoryUpS': '持有上限提升S',
-                        'ingredientChanceS': '食材机率提升S',
-                        'skillChanceS': '技能机率提升S'
+                        'inventoryL': '持有上限提升L',
+                        'inventoryM': '持有上限提升M',
+                        'inventoryS': '持有上限提升S',
+                        'skillLevelM': '技能等级提升M',
+                        'skillLevelS': '技能等级提升S',
+                        'ingredientM': '食材机率提升M',
+                        'ingredientS': '食材机率提升S',
+                        'skillTriggerM': '技能机率提升M',
+                        'skillTriggerS': '技能机率提升S'
                     };
-                    return skillNames[skill];
+                    return skillNames[skill] || skill;
                 }).join('、') : '无'}</p>
-                <p>总分：${totalScore.toFixed(1)}分</p>
+                <p>总分：${totalScore.toFixed(2)}分</p>
                 <p>评价：${evaluation}</p>
                 <p>详细分析：</p>
                 <ul>
-                    ${isShiny ? '<li>闪光加成：0.5分</li>' : ''}
-                    <li>副技能得分：${subskillScore.toFixed(1)}分</li>
+                    ${isShiny ? '<li>闪光加成：0.50分</li>' : ''}
+                    <li>副技能得分：${subskillScore.toFixed(2)}分</li>
                     ${pokemonCategory === 'ingredient' ? 
-                        `<li>食材组合得分：${(ingredientType1 === ingredientType2 && ingredientType2 === ingredientType3) ? '0.8分' : '0分'}</li>` : 
+                        `<li>食材组合得分：${(() => {
+                            const specialPokemon = ['845', '453', '454', '980', '7054', '1', '2', '3', '909', '910', '911'];
+                            const isSpecialPokemon = specialPokemon.includes(document.getElementById('pokemonName').value);
+                            const ingredient1 = document.getElementById('ingredientType1').value;
+                            const ingredient2 = document.getElementById('ingredientType2').value;
+                            const ingredient3 = document.getElementById('ingredientType3').value;
+                            
+                            if (ingredient1 === ingredient2 && ingredient2 !== ingredient3) {
+                                return isSpecialPokemon ? '0.00分' : '0.40分';
+                            } else if (ingredient1 === ingredient3 && ingredient2 !== ingredient3) {
+                                return (['4', '5', '6', '147', '148', '149', '69', '70', '71'].includes(document.getElementById('pokemonName').value)) ? '-0.40分' : '0.00分';
+                            } else if (ingredient1 !== ingredient2 && ingredient2 !== ingredient3 && ingredient1 !== ingredient3) {
+                                return '-0.80分';
+                            }
+                            return '0.00分';
+                        })()}</li>` : 
                         ''}
-                    <li>性格加成：${(['sassy', 'quiet', 'modest', 'rash'].includes(nature) && pokemonCategory === 'ingredient') ? '1.0分' : 
-                                    (nature === 'jolly' && pokemonCategory === 'ingredient') ? '-1.0分' :
-                                    (nature === 'bold' && pokemonCategory === 'ingredient') ? '-0.6分' :
-                                    (nature === 'adamant' && pokemonCategory === 'ingredient') ? '-0.4分' :
-                                    (nature === 'calm' && pokemonCategory === 'skill') ? '0.5分' :
-                                    (['gentle', 'modest', 'careful'].includes(nature) && pokemonCategory === 'skill') ? '1.0分' :
-                                    (['lonely', 'brave', 'adamant'].includes(nature) && pokemonCategory === 'skill') ? '0.6分' :
-                                    (nature === 'naive' && pokemonCategory === 'skill') ? '-1.0分' :
-                                    (nature === 'bold' && pokemonCategory === 'skill') ? '-0.6分' :
-                                    (nature === 'naughty' && pokemonCategory === 'skill') ? '-0.4分' :
-                                    (nature === 'adamant' && pokemonCategory === 'berry') ? '1.2分' :
-                                    (['lonely', 'brave', 'naughty'].includes(nature) && pokemonCategory === 'berry') ? '0.9分' :
-                                    (['rash', 'timid', 'naive', 'jolly'].includes(nature) && pokemonCategory === 'berry') ? '0.5分' : '0分'}</li>
+                    <li>性格加成：${(['sassy', 'quiet', 'rash'].includes(nature) && pokemonCategory === 'ingredient') ? '1.00分' : 
+                                    (nature === 'modest' && pokemonCategory === 'ingredient') ? '0.50分' :
+                                    (nature === 'jolly' && pokemonCategory === 'ingredient') ? '-1.00分' :
+                                    (nature === 'bold' && pokemonCategory === 'ingredient') ? '-0.60分' :
+                                    (nature === 'adamant' && pokemonCategory === 'ingredient') ? '-0.40分' :
+                                    (nature === 'calm' && pokemonCategory === 'skill') ? '0.50分' :
+                                    (['gentle', 'modest', 'careful'].includes(nature) && pokemonCategory === 'skill') ? '1.00分' :
+                                    (['lonely', 'brave', 'adamant'].includes(nature) && pokemonCategory === 'skill') ? '0.60分' :
+                                    (nature === 'naive' && pokemonCategory === 'skill') ? '-1.00分' :
+                                    (nature === 'bold' && pokemonCategory === 'skill') ? '-0.60分' :
+                                    (nature === 'naughty' && pokemonCategory === 'skill') ? '-0.40分' :
+                                    (nature === 'adamant' && pokemonCategory === 'berry') ? '1.20分' :
+                                    (['lonely', 'brave', 'naughty'].includes(nature) && pokemonCategory === 'berry') ? '0.90分' :
+                                    (['rash', 'naive', 'jolly'].includes(nature) && pokemonCategory === 'berry') ? '0.30分' :
+                                    (['modest', 'calm', 'bold'].includes(nature) && pokemonCategory === 'berry') ? '-0.90分' : '0.00分'}</li>
                 </ul>
             `;
         }
