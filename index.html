@@ -922,28 +922,70 @@
             '100': null
         };
 
-        // 添加事件监听器到所有复选框
-        document.addEventListener('DOMContentLoaded', function() {
-            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            checkboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', function(e) {
-                    const level = this.id.split('_')[1];
-                    const skillName = this.id.split('_')[0];
+        function filterPokemonByType() {
+            var typeFilter = document.getElementById('pokemonTypeFilter');
+            var pokemonSelect = document.getElementById('pokemonName');
+            var selectedType = typeFilter.value;
+            
+            // 清空当前选择
+            pokemonSelect.value = '';
+            
+            // 隐藏所有选项
+            for (var i = 0; i < pokemonSelect.options.length; i++) {
+                pokemonSelect.options[i].disabled = true;
+                pokemonSelect.options[i].style.display = 'none';
+            }
+            
+            // 如果选择了"全部属性"，显示所有选项
+            if (selectedType === '') {
+                for (var i = 0; i < pokemonSelect.options.length; i++) {
+                    pokemonSelect.options[i].disabled = false;
+                    pokemonSelect.options[i].style.display = '';
+                }
+                return;
+            }
+            
+            // 显示选中属性的选项
+            var optgroups = pokemonSelect.getElementsByTagName('optgroup');
+            for (var i = 0; i < optgroups.length; i++) {
+                if (optgroups[i].label === selectedType) {
+                    var options = optgroups[i].getElementsByTagName('option');
+                    for (var j = 0; j < options.length; j++) {
+                        options[j].disabled = false;
+                        options[j].style.display = '';
+                    }
+                }
+            }
+            
+            // 更新宝可梦类型
+            updatePokemonType();
+        }
+
+        // 初始化页面时调用一次筛选函数
+        window.onload = function() {
+            filterPokemonByType();
+            
+            // 初始化复选框事件监听
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            for (var i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].addEventListener('change', function(e) {
+                    var level = this.id.split('_')[1];
+                    var skillName = this.id.split('_')[0];
                     
                     if (this.checked) {
                         // 检查是否已经在该等级选择了其他技能
                         if (selectedSkills[level] && selectedSkills[level] !== skillName) {
                             // 如果已经选择了其他技能，取消当前选择
                             this.checked = false;
-                            alert('每个等级只能选择一个技能！');
+                            window.alert('每个等级只能选择一个技能！');
                             return;
                         }
                         
                         // 检查其他等级是否已经选择了相同的技能
-                        for (let otherLevel in selectedSkills) {
+                        for (var otherLevel in selectedSkills) {
                             if (otherLevel !== level && selectedSkills[otherLevel] === skillName) {
                                 this.checked = false;
-                                alert('不同等级不能选择相同的技能！');
+                                window.alert('不同等级不能选择相同的技能！');
                                 return;
                             }
                         }
@@ -955,8 +997,8 @@
                         selectedSkills[level] = null;
                     }
                 });
-            });
-        });
+            }
+        };
 
         function calculatePokemonScore() {
             const pokemonName = document.getElementById('pokemonName').value;
