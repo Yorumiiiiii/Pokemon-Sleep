@@ -1417,6 +1417,110 @@
                 <p>评价：${evaluation}</p>
                 <p>详细分析：</p>
                 <ul>
+                    <li><strong>前三个技能分数明细：</strong></li>
+                    ${isShiny ? '<li>闪光加成：0.50分</li>' : ''}
+                    <li>副技能得分：${(() => {
+                        let score = 0;
+                        const skills = selectedSubskills.filter(skill => skill.level <= 50);
+                        if (pokemonCategory === 'ingredient') {
+                            const hasIngredientM = skills.some(skill => skill.name === 'ingredientM');
+                            skills.forEach(skill => {
+                                switch(skill.name) {
+                                    case 'ingredientM': score += 1.6; break;
+                                    case 'ingredientS': score += 0.7; break;
+                                    case 'helpSpeedM': score += 0.9; break;
+                                    case 'helpSpeedS': score += 0.4; break;
+                                    case 'berryS': score += 0.2; break;
+                                    case 'sleepExpBonus': score += 0.3; break;
+                                    case 'helperBonus': score += hasIngredientM ? 1.3 : 0.3; break;
+                                    case 'inventoryS': score += hasIngredientM ? 0.2 : 0.1; break;
+                                    case 'inventoryM': score += hasIngredientM ? 0.4 : 0.2; break;
+                                    case 'inventoryL': score += hasIngredientM ? 0.6 : 0.3; break;
+                                    case 'skillLevelM': score += 0.4; break;
+                                    case 'skillLevelS': score += 0.2; break;
+                                }
+                            });
+                        } else if (pokemonCategory === 'skill') {
+                            const hasSkillChanceM = skills.some(skill => skill.name === 'skillTriggerM');
+                            const hasBerryS = skills.some(skill => skill.name === 'berryS');
+                            const specialPokemon = ['845', '453', '454', '980', '7054', '1', '2', '3', '909', '910', '911'];
+                            const isSpecialPokemon = specialPokemon.includes(pokemonName);
+                            skills.forEach(skill => {
+                                switch(skill.name) {
+                                    case 'skillTriggerM': score += 1.6; break;
+                                    case 'skillTriggerS': score += 0.7; break;
+                                    case 'helpSpeedM': score += 0.9; break;
+                                    case 'helpSpeedS': score += 0.4; break;
+                                    case 'inventoryL': score += 0.1; break;
+                                    case 'inventoryM': score += 0.1; break;
+                                    case 'inventoryS': score += 0.1; break;
+                                    case 'skillLevelM': score += 0.4; break;
+                                    case 'skillLevelS': score += 0.2; break;
+                                    case 'sleepExpBonus': score += 0.3; break;
+                                    case 'helperBonus': score += hasSkillChanceM ? 1.3 : 0.3; break;
+                                    case 'berryS': score += isSpecialPokemon ? 0.56 : 0.2; break;
+                                }
+                            });
+                        } else {
+                            const hasBerryS = skills.some(skill => skill.name === 'berryS');
+                            skills.forEach(skill => {
+                                switch(skill.name) {
+                                    case 'berryS': score += 1.8; break;
+                                    case 'helpSpeedM': score += 1.2; break;
+                                    case 'helpSpeedS': score += 0.6; break;
+                                    case 'sleepExp': score += 0.3; break;
+                                    case 'helperBonus': score += hasBerryS ? 1.3 : 0.5; break;
+                                }
+                            });
+                            if (!hasBerryS) {
+                                score -= 2.5;
+                            }
+                        }
+                        return score.toFixed(2);
+                    })()}分</li>
+                    ${pokemonCategory === 'ingredient' ? 
+                        `<li>食材组合得分：${(() => {
+                            const specialPokemon = ['845', '453', '454', '980', '7054', '1', '2', '3', '909', '910', '911'];
+                            const isSpecialPokemon = specialPokemon.includes(document.getElementById('pokemonName').value);
+                            const ingredient1 = document.getElementById('ingredientType1').value;
+                            const ingredient2 = document.getElementById('ingredientType2').value;
+                            const ingredient3 = document.getElementById('ingredientType3').value;
+                            
+                            if (ingredient1 === ingredient2 && ingredient2 !== ingredient3) {
+                                return isSpecialPokemon ? '0.00分' : '0.40分';
+                            } else if (ingredient1 === ingredient3 && ingredient2 !== ingredient3) {
+                                return (['4', '5', '6', '147', '148', '149', '69', '70', '71'].includes(document.getElementById('pokemonName').value)) ? '-0.40分' : '0.00分';
+                            } else if (ingredient1 !== ingredient2 && ingredient2 !== ingredient3 && ingredient1 !== ingredient3) {
+                                return '-0.80分';
+                            }
+                            return '0.00分';
+                        })()}</li>` : 
+                        ''}
+                    <li>性格加成：${(() => {
+                        if (pokemonCategory === 'ingredient') {
+                            if (['sassy', 'quiet', 'rash'].includes(nature)) return '1.00分';
+                            if (nature === 'modest') return '0.50分';
+                            if (['jolly', 'naughty', 'rash', 'careful'].includes(nature)) return '-1.00分';
+                            if (['bold', 'timid', 'calm'].includes(nature)) return '-0.60分';
+                            if (nature === 'modest') return '-0.40分';
+                        } else if (pokemonCategory === 'skill') {
+                            if (nature === 'calm') return '0.50分';
+                            if (['gentle', 'modest', 'careful'].includes(nature)) return '1.00分';
+                            if (['lonely', 'brave', 'adamant'].includes(nature)) return '0.60分';
+                            if (['rash', 'naive', 'jolly'].includes(nature)) return '-1.00分';
+                            if (['bold', 'timid', 'modest'].includes(nature)) return '-0.60分';
+                            if (nature === 'naughty') return '-0.40分';
+                        } else {
+                            if (nature === 'adamant') return '1.20分';
+                            if (['lonely', 'brave', 'naughty'].includes(nature)) return '0.90分';
+                            if (['rash', 'naive', 'jolly'].includes(nature)) return '0.30分';
+                            if (['modest', 'calm', 'bold'].includes(nature)) return '-0.90分';
+                        }
+                        return '0.00分';
+                    })()}</li>
+                </ul>
+                <ul>
+                    <li><strong>全部技能分数明细：</strong></li>
                     ${isShiny ? '<li>闪光加成：0.50分</li>' : ''}
                     <li>副技能得分：${subskillScore.toFixed(2)}分</li>
                     ${pokemonCategory === 'ingredient' ? 
@@ -1437,21 +1541,28 @@
                             return '0.00分';
                         })()}</li>` : 
                         ''}
-                    <li>性格加成：${(['sassy', 'quiet', 'rash'].includes(nature) && pokemonCategory === 'ingredient') ? '1.00分' : 
-                                    (nature === 'modest' && pokemonCategory === 'ingredient') ? '0.50分' :
-                                    (nature === 'jolly' && pokemonCategory === 'ingredient') ? '-1.00分' :
-                                    (nature === 'bold' && pokemonCategory === 'ingredient') ? '-0.60分' :
-                                    (nature === 'adamant' && pokemonCategory === 'ingredient') ? '-0.40分' :
-                                    (nature === 'calm' && pokemonCategory === 'skill') ? '0.50分' :
-                                    (['gentle', 'modest', 'careful'].includes(nature) && pokemonCategory === 'skill') ? '1.00分' :
-                                    (['lonely', 'brave', 'adamant'].includes(nature) && pokemonCategory === 'skill') ? '0.60分' :
-                                    (nature === 'naive' && pokemonCategory === 'skill') ? '-1.00分' :
-                                    (nature === 'bold' && pokemonCategory === 'skill') ? '-0.60分' :
-                                    (nature === 'naughty' && pokemonCategory === 'skill') ? '-0.40分' :
-                                    (nature === 'adamant' && pokemonCategory === 'berry') ? '1.20分' :
-                                    (['lonely', 'brave', 'naughty'].includes(nature) && pokemonCategory === 'berry') ? '0.90分' :
-                                    (['rash', 'naive', 'jolly'].includes(nature) && pokemonCategory === 'berry') ? '0.30分' :
-                                    (['modest', 'calm', 'bold'].includes(nature) && pokemonCategory === 'berry') ? '-0.90分' : '0.00分'}</li>
+                    <li>性格加成：${(() => {
+                        if (pokemonCategory === 'ingredient') {
+                            if (['sassy', 'quiet', 'rash'].includes(nature)) return '1.00分';
+                            if (nature === 'modest') return '0.50分';
+                            if (['jolly', 'naughty', 'rash', 'careful'].includes(nature)) return '-1.00分';
+                            if (['bold', 'timid', 'calm'].includes(nature)) return '-0.60分';
+                            if (nature === 'modest') return '-0.40分';
+                        } else if (pokemonCategory === 'skill') {
+                            if (nature === 'calm') return '0.50分';
+                            if (['gentle', 'modest', 'careful'].includes(nature)) return '1.00分';
+                            if (['lonely', 'brave', 'adamant'].includes(nature)) return '0.60分';
+                            if (['rash', 'naive', 'jolly'].includes(nature)) return '-1.00分';
+                            if (['bold', 'timid', 'modest'].includes(nature)) return '-0.60分';
+                            if (nature === 'naughty') return '-0.40分';
+                        } else {
+                            if (nature === 'adamant') return '1.20分';
+                            if (['lonely', 'brave', 'naughty'].includes(nature)) return '0.90分';
+                            if (['rash', 'naive', 'jolly'].includes(nature)) return '0.30分';
+                            if (['modest', 'calm', 'bold'].includes(nature)) return '-0.90分';
+                        }
+                        return '0.00分';
+                    })()}</li>
                 </ul>
                 <p style="color: #666; font-style: italic; margin-top: 15px;">测试中，结果仅供参考哦亲~~</p>
             `;
@@ -1778,48 +1889,93 @@
         }
 
         function filterPokemonByType() {
-            const selectedType = document.getElementById('pokemonTypeFilter').value;
+            const typeFilter = document.getElementById('pokemonTypeFilter').value;
             const pokemonSelect = document.getElementById('pokemonName');
+            const optgroups = pokemonSelect.getElementsByTagName('optgroup');
             
-            // 保存当前选中的值
-            const currentValue = pokemonSelect.value;
-            
-            // 获取所有optgroup
-            const optgroups = Array.from(pokemonSelect.getElementsByTagName('optgroup'));
-            
-            // 遍历所有optgroup
-            optgroups.forEach(optgroup => {
-                const type = optgroup.label;
-                if (!selectedType || type === selectedType) {
-                    // 如果选择了全部属性或匹配当前属性，显示该组
+            // 如果没有选择类型，显示所有选项
+            if (!typeFilter) {
+                Array.from(optgroups).forEach(optgroup => {
                     optgroup.style.display = '';
-                    // 显示该组下的所有选项
+                    Array.from(optgroup.getElementsByTagName('option')).forEach(option => {
+                        option.style.display = '';
+                    });
+                });
+                return;
+            }
+            
+            // 隐藏所有选项组
+            Array.from(optgroups).forEach(optgroup => {
+                if (optgroup.label === typeFilter) {
+                    optgroup.style.display = '';
                     Array.from(optgroup.getElementsByTagName('option')).forEach(option => {
                         option.style.display = '';
                     });
                 } else {
-                    // 否则隐藏该组
                     optgroup.style.display = 'none';
-                    // 隐藏该组下的所有选项
                     Array.from(optgroup.getElementsByTagName('option')).forEach(option => {
                         option.style.display = 'none';
                     });
                 }
             });
+
+            // 重置宝可梦选择
+            pokemonSelect.value = '';
             
-            // 如果没有选择任何宝可梦，重置选择
-            if (!currentValue) {
-                pokemonSelect.value = '';
-            } else {
-                // 检查当前选中的宝可梦是否在可见选项中
-                const selectedOption = pokemonSelect.options[pokemonSelect.selectedIndex];
-                if (selectedOption && selectedOption.style.display === 'none') {
-                    pokemonSelect.value = '';
-                } else {
-                    pokemonSelect.value = currentValue;
-                }
-            }
+            // 触发 change 事件以更新其他相关字段
+            const event = new Event('change', {
+                bubbles: true,
+                cancelable: true,
+            });
+            pokemonSelect.dispatchEvent(event);
         }
+
+        // 页面加载完成后初始化事件监听
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为类型筛选添加事件监听
+            const typeFilter = document.getElementById('pokemonTypeFilter');
+            typeFilter.addEventListener('change', filterPokemonByType);
+            
+            // 为宝可梦选择添加事件监听
+            const pokemonSelect = document.getElementById('pokemonName');
+            pokemonSelect.addEventListener('change', function() {
+                updatePokemonType();
+            });
+            
+            // 初始化复选框事件监听
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function(e) {
+                    const level = this.id.split('_')[1];
+                    const skillName = this.id.split('_')[0];
+                    
+                    if (this.checked) {
+                        // 检查是否已经在该等级选择了其他技能
+                        if (selectedSkills[level] && selectedSkills[level] !== skillName) {
+                            // 如果已经选择了其他技能，取消当前选择
+                            this.checked = false;
+                            alert('每个等级只能选择一个技能！');
+                            return;
+                        }
+                        
+                        // 检查其他等级是否已经选择了相同的技能
+                        for (let otherLevel in selectedSkills) {
+                            if (otherLevel !== level && selectedSkills[otherLevel] === skillName) {
+                                this.checked = false;
+                                alert('不同等级不能选择相同的技能！');
+                                return;
+                            }
+                        }
+                        
+                        // 如果检查通过，更新选中的技能
+                        selectedSkills[level] = skillName;
+                    } else {
+                        // 如果取消选中，清除该等级的技能记录
+                        selectedSkills[level] = null;
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html> 
